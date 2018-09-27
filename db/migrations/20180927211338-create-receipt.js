@@ -9,13 +9,16 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       merchant: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       product: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       price: {
-        type: Sequelize.DECIMAL
+        type: Sequelize.DECIMAL,
+        allowNull: false
       },
       date: {
         type: Sequelize.DATE
