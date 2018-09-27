@@ -141,7 +141,7 @@ const runapp = async urlArr => {
   console.log('batch receipt storege complete')
 }
 
-runapp(receiptURL)
+//runapp(receiptURL)
 
 /**************************************************
 *  Load Routes
