@@ -19,7 +19,7 @@ const auth = require('../auth.js');
 
      app.post('/signup', (req, res) => {
         // hash the password
-        console.log(req.body);
+        //console.log(req.body);
         bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(req.body.password, salt, (err, hash) => {
             console.log("hash " + hash);

@@ -20,6 +20,9 @@ module.exports = (sequelize, DataTypes) => {
     location: {
       type: DataTypes.STRING
     },
+    url: {
+      type: DataTypes.STRING
+    }
   }, {});
   Receipt.associate = function(models) {
     // associations can be defined here

@@ -22,7 +22,7 @@ module.exports = function(app) {
     res.status(201).json(receipt)
   }))
 
-  app.delete('/:id', asyncHandler((req, res, next) => {
+  app.delete('/:id', asyncHandler(async (req, res, next) => {
     await Receipt.destroy({
       where: {
         id: req.params.id
