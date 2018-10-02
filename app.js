@@ -9,6 +9,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const axios = require('axios');
+const session = require('express-session');
 const compression = require('compression');
 const path = require('path');
 const {convertingReceiptFromURL} = require('./controllers/taggun');
@@ -26,13 +27,14 @@ let verifyAuthentication = (req, res, next) => {
     if (typeof req.cookies.jwtToken === 'undefined' || req.cookies.jwtToken === null) {
       req.user = null;
     } else {
-      var token = req.cookies.jwtToken;
+      var token = req.cookies.nToken;
 
       //Synchronous verification
       try{
         decodedToken = jwt.verify(token, process.env.SECRETKEY);
+        console.log(decodedToken)
         //console.log("***Authenticate***");
-        req.user = decodedToken.id;
+        req.user = decodedToken.payload;
       }catch(err){
         console.log("Authentication Error:", err.message);
       };
@@ -58,7 +60,32 @@ app.use(express.json());
 app.use(verifyAuthentication)
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(compression());
-
+//app.use('/api', require('./controllers'))
+//Setting up cookie
+// app.use(session({
+//     key: 'user_id',
+//     secret: 'somerandonstuffs',
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//         expires: 600000
+//     }
+// }));
+//
+// app.use((req, res, next) => {
+//   if (req.cookies.user._id && !req.session.user) {
+//     res.clearCookie('user_id');
+//   }
+//   next();
+// });
+//
+// var sessionChecker = (req, res, next) => {
+//   if (req.session.user && req.cookies.user_id) {
+//     res.redirect('/');
+//   } else {
+//     next();
+//   }
+// }
 /***************************************************
  *  SQL Connection
  ***************************************************/
@@ -76,15 +103,15 @@ sequelize
 
 
 // Any remaining  request with an extension (.js, .css, etc...) send 404
-app.use((req, res, next) => {
-  if (path.extname(req.path).length) {
-    const err = new Error('Not found')
-    err.status = 404
-    next(err)
-  } else {
-    next()
-  }
-});
+// app.use((req, res, next) => {
+//   if (path.extname(req.path).length) {
+//     const err = new Error('Not found')
+//     err.status = 404
+//     next(err)
+//   } else {
+//     next()
+//   }
+// });
 
 // Error handling endware
 app.use(( err, req, res, next) => {
@@ -97,9 +124,10 @@ app.use(( err, req, res, next) => {
 *  Load Routes
 ***************************************************/
 require('./controllers/signup.js')(app);
-require('./controllers/receipt.js')(app);
+//require('./controllers/receipt.js')(app);
 //require('./controllers/taggun.js')(app);
-require('./receipts.js')(app);
+//require('./receipts.js')(app);
+//require('./controllers/index.js')(app)
 
 
 // Listen on port number

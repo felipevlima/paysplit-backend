@@ -12,7 +12,15 @@ const auth = require('../auth.js');
      /****************************************************
       *  SIGNUP ROUTES
       ***************************************************/
-     app.get('/signup', function (req, res) {
+      var sessionChecker = (req, res, next) => {
+        if (req.session.user && req.cookies.user_id) {
+          res.redirect('/');
+        } else {
+          next();
+        }
+      }
+
+     app.get('/signup', sessionChecker, function (req, res) {
         res.send("SIGNUP PAGE")
          //res.render('signup', {});
      });
@@ -30,11 +38,21 @@ const auth = require('../auth.js');
                 phoneNumber: req.body.phoneNumber,
                 password: hash
             };
+            // const user = new User(req.body)
             models.User.create(newUser, {w:1}).then((savedUser)=>{
                 //console.log(savedUser.dataValues.id)
                 console.log("saved", savedUser.firstName)
-                auth.setUserIDCookie(savedUser, res);
-                return res.status(200).send({ message: 'Created user' });
+                // test = auth.setUserIDCookie(savedUser, res);
+                var token = jwt.sign({_id: newUser._id }, process.env.SECRETKEY, { expiresIn: "60 days" });
+                console.log(token)
+                  res.cookie('nToken', token, { maxAge: 900000, httpOnly: true })
+                  res.status(200).send({ message: 'Created user' })//.then(user => {
+
+                      //req.session.user = user.dataValues;
+                      //console.log("SESSION: ", req.session.user = user.dataValues);
+                    //})
+
+
 
             }).catch((err)=>{
                 res.json(err)
@@ -47,7 +65,7 @@ const auth = require('../auth.js');
     /****************************************************
      *  LOGIN ROUTES
      ***************************************************/
-    app.get('/login', function(req, res) {
+    app.get('/login', sessionChecker,  function(req, res) {
         res.send("LOGIN")
          //res.render('login');
      });
@@ -69,7 +87,11 @@ const auth = require('../auth.js');
                 if(result){
                     //Set authentication cookie
                     console.log("resulting result", result)
-                    auth.setUserIDCookie(data, res);
+                    //auth.setUserIDCookie(data, res);
+                    var token = jwt.sign({ _id: models.User._id }, process.env.SECRETKEY,{ expiresIn: "60 days" });
+                    res.cookie('nToken', token, { maxAge: 900000, httpOnly: true });
+                    //req.session.user = user.dataValues
+                    console.log(token)
                     return res.status(200).send({ message: 'user logged in' });
                 }else{
                     console.log('wrong username or password')

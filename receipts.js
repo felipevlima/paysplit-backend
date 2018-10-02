@@ -1,5 +1,6 @@
-const axios = require('axios')
-const {convertReceiptFromURL} = require('./controllers/taggun')
+const axios = require('axios');
+const {convertReceiptFromURL} = require('./controllers/taggun');
+const models = require('./db/models');
 
 module.exports = function(app) {
 // const {sampleReceiptAmt, sampleReceiptText, sampleReceiptText2, sampleReceiptText3} = require('./exampleData')
@@ -62,9 +63,13 @@ module.exports = function(app) {
       const receiptArr = processingFunc(receipt)
       console.log('storing receipt')
       const storedReceipt = await dbReq.post('/receipts', receiptArr)
+      //models.Receipt.create(receiptArr, {w:1}).then((savedReceipt) => {
+       //await models.Receipt.bulkCreate((receiptArr) => {
+      //   return res.status(200).send({message: 'Stored in the database successfully'})
+      // })
       console.log('receipt stored',storedReceipt.data)
     } catch (err) {
-      console.log(err)
+      console.log("OPPS",err)
     }
   }
   //storeReceiptDataFromURL(receiptURLs.traderJoe2,  convertReceiptFromURL, processReceiptData)
