@@ -85,7 +85,7 @@ const auth = require('../auth.js');
                     res.cookie('nToken', token, { maxAge: 900000, httpOnly: true });
                     //req.session.user = user.dataValues
                     console.log(token)
-                    return res.status(200).send({ message: 'user logged in' });
+                    return res.status(200).send({ message: 'user logged in successfully', token });
                 }else{
                     console.log('wrong username or password')
                 }
