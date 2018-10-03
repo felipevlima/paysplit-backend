@@ -30,7 +30,7 @@ const auth = require('../auth.js');
         //console.log(req.body);
         bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(req.body.password, salt, (err, hash) => {
-            console.log("hash " + hash);
+            //console.log("hash " + hash);
             var newUser = {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
@@ -45,15 +45,8 @@ const auth = require('../auth.js');
                 // test = auth.setUserIDCookie(savedUser, res);
                 var token = jwt.sign({_id: newUser._id }, process.env.SECRETKEY, { expiresIn: "60 days" });
                 console.log(token)
-                  res.cookie('nToken', token, { maxAge: 900000, httpOnly: true })
-                  res.status(200).send({ message: 'Created user' })//.then(user => {
-
-                      //req.session.user = user.dataValues;
-                      //console.log("SESSION: ", req.session.user = user.dataValues);
-                    //})
-
-
-
+                  var test = res.cookie('nToken', token, { maxAge: 900000, httpOnly: true })
+                  res.status(200).json({ message: 'Created user successfully', token })
             }).catch((err)=>{
                 res.json(err)
                 console.log("User Creation error:", err.message);
