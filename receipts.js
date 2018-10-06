@@ -3,13 +3,12 @@ const {convertReceiptFromURL} = require('./controllers/taggun');
 const models = require('./db/models');
 
 module.exports = function(app) {
-// const {sampleReceiptAmt, sampleReceiptText, sampleReceiptText2, sampleReceiptText3} = require('./exampleData')
   const receiptURLs = {
-    // traderJoe1:
-      // 'http://4hatsandfrugal.com/wp-content/uploads/2015/06/64-dollar-grocery-budget-trader-joes1.jpg',
-    // kroger1:
-      // 'https://thesaraandmalarishow.files.wordpress.com/2009/03/kroger.jpg',
-    // foodtown1: 'http://neuseelandbilder.com/en/img/foodtown.gif',
+    traderJoe1:
+      'http://4hatsandfrugal.com/wp-content/uploads/2015/06/64-dollar-grocery-budget-trader-joes1.jpg',
+    kroger1:
+       'https://thesaraandmalarishow.files.wordpress.com/2009/03/kroger.jpg',
+     foodtown1: 'http://neuseelandbilder.com/en/img/foodtown.gif',
     fairway1: 'https://www.thebillfold.com/wp-content/uploads/2016/05/1zwdpei1DmTW0V5iyPVOB_A.png',
     traderJoe2: 'https://birdfriendsnesthomes.files.wordpress.com/2015/02/fullsizerender_12.jpg',
 
@@ -56,13 +55,13 @@ module.exports = function(app) {
 
   const storeReceiptDataFromURL = async(receiptURL, ocrFunc, processingFunc) => {
     const dbReq = axios.create({
-      baseURL: 'http://localhost:8080/api/'
+      baseURL: 'http://localhost:8080'
     })
     try {
       const receipt = await ocrFunc(receiptURL)
       const receiptArr = processingFunc(receipt)
       console.log('storing receipt')
-      const storedReceipt = await dbReq.post('/receipts', receiptArr)
+      const storedReceipt = await dbReq.post('/', receiptArr)
       //models.Receipt.create(receiptArr, {w:1}).then((savedReceipt) => {
        //await models.Receipt.bulkCreate((receiptArr) => {
       //   return res.status(200).send({message: 'Stored in the database successfully'})

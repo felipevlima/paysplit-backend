@@ -1,5 +1,6 @@
-const { Receipt } = require('../db/models');
+//const { Receipt } = require('../db/models');
 const asyncHandler = require('express-async-handler');
+const models = require('../db/models');
 
 module.exports = function(app) {
 
@@ -13,9 +14,9 @@ module.exports = function(app) {
   // app.post('/', (req, res) => {
   //   // console.log(req.body)
   //   const receipt = Receipt.bulkCreate(req.body, {returning: true})
-  router.post('/', asyncHandler(async (req, res, next) => {
+  app.post('/', asyncHandler(async (req, res, next) => {
   // console.log(req.body)
-  const receipt = await Receipt.bulkCreate(req.body, {returning: true})
+  const receipt = await models.Receipt.bulkCreate(req.body, {returning: true})
     console.log("********",req.body)
     // const receipt = await Receipt.findAll()
     if (receipt.length === 0) {
@@ -23,6 +24,22 @@ module.exports = function(app) {
     }
     res.status(201).json(receipt)
   }))
+
+
+
+  app.post('/receipts', (req, res) => {
+    var newReceipt = {
+      merchant: req.body.merchant,
+      product: req.body.product,
+      price: req.body.price,
+      date: req.body.date
+    }
+    models.Receipt.create(newReceipt, {w:1}).then((savedReceipt) => {
+      res.status(200).json({message: 'Receipt stored successfully'})
+    }).catch((err) => {
+      res.json(err)
+    })
+  });
 
   app.delete('/:id', asyncHandler(async (req, res, next) => {
     await Receipt.destroy({

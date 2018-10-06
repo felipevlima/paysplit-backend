@@ -45,8 +45,8 @@ const auth = require('../auth.js');
                 // test = auth.setUserIDCookie(savedUser, res);
                 var token = jwt.sign({_id: newUser._id }, process.env.SECRETKEY, { expiresIn: "60 days" });
                 console.log(token)
-                  var test = res.cookie('nToken', token, { maxAge: 900000, httpOnly: true })
-                  res.status(200).json({ message: 'Created user successfully', token })
+                  res.cookie('nToken', token, { maxAge: 900000, httpOnly: true })
+                  res.status(200).json({ message: 'Created user successfully', token})
             }).catch((err)=>{
                 res.json(err)
                 console.log("User Creation error:", err.message);

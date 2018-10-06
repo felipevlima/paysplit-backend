@@ -13,6 +13,8 @@ const session = require('express-session');
 const compression = require('compression');
 const path = require('path');
 const {convertingReceiptFromURL} = require('./controllers/taggun');
+const sanitizer = require('sanitize');
+const expressSanitizer = require('express-sanitizer');
 
 
 //Instantiate the server
@@ -60,32 +62,8 @@ app.use(express.json());
 app.use(verifyAuthentication)
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(compression());
-//app.use('/api', require('./controllers'))
-//Setting up cookie
-// app.use(session({
-//     key: 'user_id',
-//     secret: 'somerandonstuffs',
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: {
-//         expires: 600000
-//     }
-// }));
-//
-// app.use((req, res, next) => {
-//   if (req.cookies.user._id && !req.session.user) {
-//     res.clearCookie('user_id');
-//   }
-//   next();
-// });
-//
-// var sessionChecker = (req, res, next) => {
-//   if (req.session.user && req.cookies.user_id) {
-//     res.redirect('/');
-//   } else {
-//     next();
-//   }
-// }
+app.use(require('sanitize').middleware);
+app.use(expressSanitizer()); 
 /***************************************************
  *  SQL Connection
  ***************************************************/
@@ -124,10 +102,10 @@ app.use(( err, req, res, next) => {
 *  Load Routes
 ***************************************************/
 require('./controllers/signup.js')(app);
-//require('./controllers/receipt.js')(app);
+require('./controllers/receipt.js')(app);
 //require('./controllers/taggun.js')(app);
-//require('./receipts.js')(app);
-//require('./controllers/index.js')(app)
+require('./receipts.js')(app);
+require('./controllers/index.js')(app)
 
 
 // Listen on port number
