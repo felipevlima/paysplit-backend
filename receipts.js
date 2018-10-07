@@ -4,12 +4,12 @@ const models = require('./db/models');
 
 module.exports = function(app) {
   const receiptURLs = {
-    // traderJoe1:
-    //   'http://4hatsandfrugal.com/wp-content/uploads/2015/06/64-dollar-grocery-budget-trader-joes1.jpg',
-    // kroger1:
-    //    'https://thesaraandmalarishow.files.wordpress.com/2009/03/kroger.jpg',
-    //  foodtown1: 'http://neuseelandbilder.com/en/img/foodtown.gif',
-    // fairway1: 'https://www.thebillfold.com/wp-content/uploads/2016/05/1zwdpei1DmTW0V5iyPVOB_A.png',
+    traderJoe1:
+      'http://4hatsandfrugal.com/wp-content/uploads/2015/06/64-dollar-grocery-budget-trader-joes1.jpg',
+    kroger1:
+       'https://thesaraandmalarishow.files.wordpress.com/2009/03/kroger.jpg',
+     foodtown1: 'http://neuseelandbilder.com/en/img/foodtown.gif',
+    fairway1: 'https://www.thebillfold.com/wp-content/uploads/2016/05/1zwdpei1DmTW0V5iyPVOB_A.png',
     traderJoe2: 'https://birdfriendsnesthomes.files.wordpress.com/2015/02/fullsizerender_12.jpg',
 
   }
@@ -53,10 +53,9 @@ module.exports = function(app) {
       const storedReceipt = await dbReq.post('/', receiptArr)
       //console.log('receipt stored',storedReceipt.data)
     } catch (err) {
-      console.log("OPPS",err)
+      console.log("ERROR: ",err)
     }
   }
-  //storeReceiptDataFromURL(receiptURLs.traderJoe2,  convertReceiptFromURL, processReceiptData)
 
   const runapp = async urlArr => {
     for (let receiptURL of Object.keys(urlArr)) {

@@ -4,11 +4,13 @@ const models = require('../db/models');
 
 module.exports = function(app) {
 
+
+
   //retrieve all items ever scanned
-  app.get('/', asyncHandler(async (req, res, next) => {
-    const everyItemEverPurchased = await Receipt.findAll()
-    res.json(everyItemEverPurchased)
-  }))
+  // app.get('/', asyncHandler(async (req, res, next) => {
+  //   const everyItemEverPurchased = await Receipt.findAll()
+  //   res.json(everyItemEverPurchased)
+  // }))
 
   //create bulk entry for receipt
   // app.post('/', (req, res) => {
