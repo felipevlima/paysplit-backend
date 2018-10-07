@@ -22,22 +22,8 @@ module.exports = function(app) {
     const summary = receipt.text.text.toLowerCase()
     // console.log("RECEIPT" , receipt)
     let merchant = ''
-    const storeNameMap = {foodtown: 'Foodtown', kroger: 'Kroger', trader: 'Trader Joe\'s', fairway: 'Fairway'}
     const textArr = summary.split('\n')
     const firstword = textArr[0].split(' ')[0] //find the firstword in the text (as opposed to first sentence)
-
-    // if (storeNameMap[firstword]) {
-    //   merchant = storeNameMap[firstword]
-    // } else {
-    //   for (let store of Object.keys(storeNameMap)) {
-    //     if (summary.includes(store)) {
-    //       merchant = storeNameMap[store]
-    //       break;
-    //     } else {
-    //       merchant = 'no name found'
-    //     }
-    //   }
-    // }
 
     //generate receipt array for bulk creation
     const itemsArr = []
