@@ -28,12 +28,14 @@
     "express-async-handler": "^1.1.4",
     "express-sanitizer": "^1.0.4",
     "express-session": "^1.15.6",
+    "fetch": "^1.1.0",
     "jsonwebtoken": "^8.3.0",
     "path": "^0.12.7",
     "pg": "^7.4.3",
     "pg-hstore": "^2.3.2",
     "sanitize": "^2.1.0",
-    "sequelize": "^4.38.1"
+    "sequelize": "^4.38.1",
+    "sequelize-tokenify": "^0.1.8"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.40",

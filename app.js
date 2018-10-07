@@ -15,6 +15,8 @@ const path = require('path');
 const {convertingReceiptFromURL} = require('./controllers/taggun');
 const sanitizer = require('sanitize');
 const expressSanitizer = require('express-sanitizer');
+var SequelizeTokenify = require('sequelize-tokenify');
+//const fetch = require("fetch");
 
 
 //Instantiate the server
@@ -63,7 +65,7 @@ app.use(verifyAuthentication)
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(compression());
 app.use(require('sanitize').middleware);
-app.use(expressSanitizer()); 
+app.use(expressSanitizer());
 /***************************************************
  *  SQL Connection
  ***************************************************/
@@ -104,7 +106,7 @@ app.use(( err, req, res, next) => {
 require('./controllers/signup.js')(app);
 require('./controllers/receipt.js')(app);
 //require('./controllers/taggun.js')(app);
-require('./receipts.js')(app);
+//require('./receipts.js')(app);
 require('./controllers/index.js')(app)
 
 

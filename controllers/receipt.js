@@ -1,20 +1,32 @@
 //const { Receipt } = require('../db/models');
+const fetch = require("fetch")
 const asyncHandler = require('express-async-handler');
 const models = require('../db/models');
+const {runapp} = require('../receipts.js');
 
 module.exports = function(app) {
 
-  app.post('/api/img', (req, res) => {
+  // app.post('/api/img', (req, res) => {
+  //   let receiptURLs = {
+  //     url: req.body.url
+  //   };
+  //   if (receiptURLs.length === 0) {
+  //     return res.send('no entries returned').status(500)
+  //   }
+  //   .fetch(runapp(receiptURLs)).then((res) => res.json())
+  //   .then((data) => {
+  //     res.status(200).json(imageData)
+  //   })
+  // })
 
-  });
 
 
 
   //retrieve all items ever scanned
-  // app.get('/', asyncHandler(async (req, res, next) => {
-  //   const everyItemEverPurchased = await Receipt.findAll()
-  //   res.json(everyItemEverPurchased)
-  // }))
+  app.get('/test', asyncHandler(async (req, res, next) => {
+    const everyItemEverPurchased = await models.Receipts.findAll()
+    res.json(everyItemEverPurchased)
+  }))
 
   //create bulk entry for receipt
   app.post('/', asyncHandler(async (req, res, next) => {
@@ -23,24 +35,9 @@ module.exports = function(app) {
     if (receipt.length === 0) {
       return res.send('no entries returned').status(500)
     }
-    res.status(201).json(receipt)
+    res.status(201).json(req.body)
   }))
 
-
-
-  // app.post('/receipts', (req, res) => {
-  //   var newReceipt = {
-  //     merchant: req.body.merchant,
-  //     product: req.body.product,
-  //     price: req.body.price,
-  //     date: req.body.date
-  //   }
-  //   models.Receipt.create(newReceipt, {w:1}).then((savedReceipt) => {
-  //     res.status(200).json({message: 'Receipt stored successfully'})
-  //   }).catch((err) => {
-  //     res.json(err)
-  //   })
-  // });
 
   app.delete('/:id', asyncHandler(async (req, res, next) => {
     await Receipt.destroy({
