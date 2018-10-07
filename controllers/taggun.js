@@ -24,7 +24,7 @@ const convertReceiptFromURL = async url => {
   try {
     const response = await taggun.post('/receipt/v1/verbose/url', body)
     const dataObj = response.data
-    console.log('receipt converted', dataObj)
+    // console.log('receipt converted', dataObj)
     return dataObj
   } catch (err) {
     console.log(err)

@@ -4,12 +4,12 @@ const models = require('./db/models');
 
 module.exports = function(app) {
   const receiptURLs = {
-    traderJoe1:
-      'http://4hatsandfrugal.com/wp-content/uploads/2015/06/64-dollar-grocery-budget-trader-joes1.jpg',
-    kroger1:
-       'https://thesaraandmalarishow.files.wordpress.com/2009/03/kroger.jpg',
-     foodtown1: 'http://neuseelandbilder.com/en/img/foodtown.gif',
-    fairway1: 'https://www.thebillfold.com/wp-content/uploads/2016/05/1zwdpei1DmTW0V5iyPVOB_A.png',
+    // traderJoe1:
+    //   'http://4hatsandfrugal.com/wp-content/uploads/2015/06/64-dollar-grocery-budget-trader-joes1.jpg',
+    // kroger1:
+    //    'https://thesaraandmalarishow.files.wordpress.com/2009/03/kroger.jpg',
+    //  foodtown1: 'http://neuseelandbilder.com/en/img/foodtown.gif',
+    // fairway1: 'https://www.thebillfold.com/wp-content/uploads/2016/05/1zwdpei1DmTW0V5iyPVOB_A.png',
     traderJoe2: 'https://birdfriendsnesthomes.files.wordpress.com/2015/02/fullsizerender_12.jpg',
 
   }
@@ -20,32 +20,35 @@ module.exports = function(app) {
 
     //get merchant name
     const summary = receipt.text.text.toLowerCase()
+    // console.log("RECEIPT" , receipt)
     let merchant = ''
     const storeNameMap = {foodtown: 'Foodtown', kroger: 'Kroger', trader: 'Trader Joe\'s', fairway: 'Fairway'}
     const textArr = summary.split('\n')
     const firstword = textArr[0].split(' ')[0] //find the firstword in the text (as opposed to first sentence)
 
-    if (storeNameMap[firstword]) {
-      merchant = storeNameMap[firstword]
-    } else {
-      for (let store of Object.keys(storeNameMap)) {
-        if (summary.includes(store)) {
-          merchant = storeNameMap[store]
-          break;
-        } else {
-          merchant = 'no name found'
-        }
-      }
-    }
+    // if (storeNameMap[firstword]) {
+    //   merchant = storeNameMap[firstword]
+    // } else {
+    //   for (let store of Object.keys(storeNameMap)) {
+    //     if (summary.includes(store)) {
+    //       merchant = storeNameMap[store]
+    //       break;
+    //     } else {
+    //       merchant = 'no name found'
+    //     }
+    //   }
+    // }
 
     //generate receipt array for bulk creation
     const itemsArr = []
+    console.log(receipt);
     for (let item of receipt.amounts) {
       let entry = {
-        merchant: merchant,
+        merchant: receipt.merchantName.data,
         product: item.text.slice(0, -5),
         price: +item.data,
-        date: /*receipt.date.data ||*/ null
+        date: Date.now(),
+        location: receipt.numbers[0].text + " " + receipt.numbers[1].text + " " + receipt.numbers[2].text
       }
       if (entry.product.length > 2) itemsArr.push(entry)
     }
@@ -62,11 +65,7 @@ module.exports = function(app) {
       const receiptArr = processingFunc(receipt)
       console.log('storing receipt')
       const storedReceipt = await dbReq.post('/', receiptArr)
-      //models.Receipt.create(receiptArr, {w:1}).then((savedReceipt) => {
-       //await models.Receipt.bulkCreate((receiptArr) => {
-      //   return res.status(200).send({message: 'Stored in the database successfully'})
-      // })
-      console.log('receipt stored',storedReceipt.data)
+      //console.log('receipt stored',storedReceipt.data)
     } catch (err) {
       console.log("OPPS",err)
     }

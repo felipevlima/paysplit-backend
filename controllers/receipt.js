@@ -17,7 +17,7 @@ module.exports = function(app) {
   app.post('/', asyncHandler(async (req, res, next) => {
   // console.log(req.body)
   const receipt = await models.Receipt.bulkCreate(req.body, {returning: true})
-    console.log("********",req.body)
+    //console.log("********",req.body)
     // const receipt = await Receipt.findAll()
     if (receipt.length === 0) {
       return res.send('no entries returned').status(500)

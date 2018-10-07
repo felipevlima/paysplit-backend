@@ -9,7 +9,7 @@ module.exports = function(app) {
   //   })
 
   // Express sanitizer
-  router.post('/', function(req, res, next) {
+  app.post('/', function(req, res, next) {
     // replace an HTTP posted body property with the sanitized string
     req.body.sanitized = req.sanitize(req.body.propertyToSanitize);
     // send the response

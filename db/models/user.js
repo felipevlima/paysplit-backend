@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   User.associate = function(models) {
     // associations can be defined here
+    //TODO: test receipt association from the client side
     User.hasMany(models.Receipt, {as: 'Receipt', foreignKey: 'userId'})
     User.hasMany(models.Item, {as: 'Item', foreignKey:'userId'})
   };
