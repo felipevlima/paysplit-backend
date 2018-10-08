@@ -1,6 +1,7 @@
 const axios = require('axios');
 const {convertReceiptFromURL} = require('./controllers/taggun');
 const models = require('./db/models');
+const {userToken} = require('./controllers/receipt');
 
   const receiptURLs = {
   //  traderJoe1:
@@ -33,7 +34,7 @@ const models = require('./db/models');
         product: item.text.slice(0, -5),
         price: +item.data,
         date: Date.now(),
-        location: receipt.numbers[0].text + " " + receipt.numbers[1].text + " " + receipt.numbers[2].text
+        location: receipt.numbers[0].text + " " + receipt.numbers[1].text + " " + receipt.numbers[2].text,
       }
       if (entry.product.length > 2) itemsArr.push(entry)
     }
@@ -47,7 +48,8 @@ const models = require('./db/models');
     })
     try {
       const receipt = await ocrFunc(receiptURL)
-      const receiptArr = processingFunc(receipt)
+      var receiptArr = processingFunc(receipt)
+      console.log(receipt);
       console.log('storing receipt')
       const storedReceipt = await dbReq.post('/', receiptArr)
       return storedReceipt.data
@@ -64,7 +66,7 @@ const models = require('./db/models');
     console.log('batch receipt storage complete')
   }
 
-  
+
   //runapp(receiptURLs)
 
 module.exports = {runapp}

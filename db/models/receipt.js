@@ -22,11 +22,17 @@ module.exports = (sequelize, DataTypes) => {
     },
     url: {
       type: DataTypes.STRING
+    },
+    userToken: {
+      type: DataTypes.STRING,
+      allowNull: false
     }
+
   }, {});
   Receipt.associate = function(models) {
     // associations can be defined here
-    Receipt.hasMany(models.Item, {as: 'Item', foreignKey: 'user._id'})
+    Receipt.belongsTo(models.User, {foreignKey: 'user.Id'})
+    //Receipt.hasMany(models.Item, {as: 'Item', foreignKey: 'user._id'})
   };
   return Receipt;
 };

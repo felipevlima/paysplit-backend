@@ -16,7 +16,7 @@ const {convertingReceiptFromURL} = require('./controllers/taggun');
 const sanitizer = require('sanitize');
 const expressSanitizer = require('express-sanitizer');
 var SequelizeTokenify = require('sequelize-tokenify');
-//const fetch = require("fetch");
+
 
 
 //Instantiate the server

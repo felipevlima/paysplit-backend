@@ -6,25 +6,31 @@ const {runapp} = require('../receipts.js');
 
 module.exports = function(app) {
 
-  // app.post('/api/img', (req, res) => {
-  //   let receiptURLs = {
-  //     url: req.body.url
-  //   };
-  //   if (receiptURLs.length === 0) {
-  //     return res.send('no entries returned').status(500)
-  //   }
-  //   .fetch(runapp(receiptURLs)).then((res) => res.json())
-  //   .then((data) => {
-  //     res.status(200).json(imageData)
-  //   })
-  // })
+  app.post('/api/img', (req, res) => {
+    let receiptURLs = {
+      url: req.body.url,
+      //userToken: req.body.userToken
+    };
+    // let userToken = {
+    //   userToken: req.body.userToken
+    // }
+    if (receiptURLs.length === 0) {
+      return res.send('no entries returned').status(500)
+    }
+    runapp(receiptURLs)
+    res.status(200).json("Image received successfully")
+  })
 
 
-
+  app.post('/test/user', (req, res) => {
+    let userId = req.user.id
+    console.log("UserID: " + userId)
+    console.log("req.user: " + req.user);
+  });
 
   //retrieve all items ever scanned
   app.get('/test', asyncHandler(async (req, res, next) => {
-    const everyItemEverPurchased = await models.Receipts.findAll()
+    const everyItemEverPurchased = await models.Receipt.findAll()
     res.json(everyItemEverPurchased)
   }))
 
