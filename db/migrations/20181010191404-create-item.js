@@ -8,11 +8,26 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      id: {
+        type: Sequelize.UUID
+      },
+      receipt_id: {
+        type: Sequelize.UUID
+      },
       itemName: {
         type: Sequelize.STRING
       },
       price: {
-        type: Sequelize.STRING
+        type: Sequelize.DECIMAL
+      },
+      createdAt: {
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        type: Sequelize.DATE
+      },
+      deletedAt: {
+        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,

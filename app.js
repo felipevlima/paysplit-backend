@@ -15,7 +15,8 @@ const path = require('path');
 const {convertingReceiptFromURL} = require('./controllers/taggun');
 const sanitizer = require('sanitize');
 const expressSanitizer = require('express-sanitizer');
-var SequelizeTokenify = require('sequelize-tokenify');
+const SequelizeTokenify = require('sequelize-tokenify');
+const db = require('./db/models')
 
 
 
@@ -70,7 +71,7 @@ app.use(expressSanitizer());
  *  SQL Connection
  ***************************************************/
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize('check-please', process.env.DBUSER, null, { dialect: 'postgres', logging: false });
+const sequelize = new Sequelize('checkplease', process.env.DBUSER, null, { dialect: 'postgres', logging: false });
 
 sequelize
   .authenticate()
@@ -111,6 +112,8 @@ require('./controllers/index.js')(app)
 
 
 // Listen on port number
-app.listen(PORT, function () {
-    console.log('Check Please listening on port', PORT);
+db.sequelize.sync().then(() => {
+  app.listen(PORT, function () {
+      console.log('Check Please listening on port', PORT);
+  });
 });

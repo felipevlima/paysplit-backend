@@ -99,7 +99,7 @@ const auth = require('../auth.js');
  ***************************************************/
  app.get('/logout', function(req, res) {
    res.clearCookie('jwtToken');
-   res.redirect('/')
+   res.send("you are logged out")
  });
 
 }

@@ -3,6 +3,12 @@ var SequelizeTokenify = require('sequelize-tokenify');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false
+    },
     firstName: {
       type: DataTypes.STRING,
       allowNull: false
@@ -26,8 +32,15 @@ module.exports = (sequelize, DataTypes) => {
     userRecoveryToken: {
       type: DataTypes.STRING,
       unique: true
-    }
-  }, {});
+    },
+    created_at: {
+      type: DataTypes.DATE
+    },
+    updated_at: DataTypes.DATE,
+    deleted_at: DataTypes.DATE
+  }, {
+    underscored: true
+  });
   // For token field
  SequelizeTokenify.tokenify(User, {
      field: 'userRecoveryToken'
@@ -40,8 +53,8 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = function(models) {
     // associations can be defined here
     //TODO: test receipt association from the client side
-    User.hasMany(models.Receipt, {foreignKey: 'userId'})
-    //User.hasMany(models.Item, {as: 'Item', foreignKey:'userId'})
+    User.hasMany(models.Receipt)
+    User.hasMany(models.Item)
   };
 
   return User;
