@@ -57,12 +57,12 @@ module.exports = function(app) {
     })
   })
 
-  // app.get('/receipt/:id', (req, res) => {
-  //   const recId = req.params.id
-  //   models.Receipt.findById(receiptId).then(() => {
-  //     res.json({msg: 'receipt show'})
-  //   })
-  // })
+  app.get('/receipt/:id', (req, res) => {
+    const recId = req.params.id
+    models.Receipt.findById(recId).then(() => {
+      res.json({msg: 'receipt show', recId})
+    })
+  })
 
   // app.post('/records', (req, res) => {
   //   let recURLs = {

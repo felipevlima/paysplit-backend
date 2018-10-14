@@ -45,9 +45,8 @@ const auth = require('../auth.js');
                 // test = auth.setUserIDCookie(savedUser, res);
                 var token = jwt.sign({_id: newUser._id }, process.env.SECRETKEY, { expiresIn: "60 days" });
                 console.log(token)
-                  var test = res.cookie('nToken', token, { maxAge: 900000, httpOnly: true })
-                  console.log("COOKIE", res.cookie, test)
-                  res.status(200).json({ message: "Created user successfully.", userRecoveryToken: `${savedUser.userRecoveryToken}`, token})
+                  res.cookie('nToken', token, { maxAge: 900000, httpOnly: true })
+                  res.status(200).json({ message: "Created user successfully.", userRecoveryToken: `${savedUser.userRecoveryToken}`, user_id: `${savedUser.id}`})
             }).catch((err)=>{
                 res.json(err)
                 console.log("User Creation error:", err.message);
@@ -86,7 +85,7 @@ const auth = require('../auth.js');
                     res.cookie('nToken', token, { maxAge: 900000, httpOnly: true });
                     //req.session.user = user.dataValues
                     console.log(token)
-                    return res.status(200).send({ message: 'user logged in successfully', token, userRecoveryToken: `${data.userRecoveryToken}` });
+                    return res.status(200).send({ message: 'user logged in successfully', userRecoveryToken: `${data.userRecoveryToken}`, user_id: `${data.id}` });
                 }else{
                     console.log('wrong username or password')
                 }

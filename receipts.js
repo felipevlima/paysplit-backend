@@ -18,6 +18,8 @@ const {userToken} = require('./controllers/receipt');
   const processReceiptData = (receipt, user_key) => {
     console.log('processing receipt')
     //console.log('User ID: ', user_key)
+    console.log('RECEIPT', receipt);
+
      //generate receipt array for bulk creation
     const itemsArr = []
     //console.log(receipt);
