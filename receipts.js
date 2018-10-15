@@ -23,7 +23,6 @@ const {userToken} = require('./controllers/receipt');
      //generate receipt array for bulk creation
     const itemsArr = []
     //console.log(receipt);
-    //console.log('TEST', receipt)
     for (let item of receipt.amounts) {
       let entry = {
         merchant: receipt.merchantName.data,
@@ -41,8 +40,6 @@ const {userToken} = require('./controllers/receipt');
   }
 
   const storeReceiptDataFromURL = async (receiptURL, ocrFunc, processingFunc, user_key) => {
-    // console.log('here')
-    // console.log('THREE AMIGOS TACOS', user)
     const dbReq = axios.create({
       baseURL: 'http://localhost:8080'
     })
@@ -62,9 +59,7 @@ const {userToken} = require('./controllers/receipt');
 
   const runapp = async (urlArr, user_ID) => {
     for (let receiptURL of Object.keys(urlArr)) {
-      //console.log('User Id: \n', userId)
       let user_key = user_ID
-      //console.log('MEATTTTBALLS: ', meatballs);
       await storeReceiptDataFromURL(urlArr[receiptURL], convertReceiptFromURL, processReceiptData, user_key)
     }
     console.log('batch receipt storage complete')

@@ -23,10 +23,7 @@ module.exports = (sequelize, DataTypes) => {
   });
   Item.associate = function(models) {
     // associations can be defined here
-    //Item.belongsTo(models.Users, {foreignKey: 'userId'})
-    Item.belongsTo(models.Receipt, {
-    foreignKey: 'receipt_id'
-   })
+    Item.belongsTo(models.Receipt, {foreignKey: 'receipt_id'})
   };
   return Item;
 };

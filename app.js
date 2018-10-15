@@ -84,15 +84,15 @@ sequelize
 
 
 // Any remaining  request with an extension (.js, .css, etc...) send 404
-// app.use((req, res, next) => {
-//   if (path.extname(req.path).length) {
-//     const err = new Error('Not found')
-//     err.status = 404
-//     next(err)
-//   } else {
-//     next()
-//   }
-// });
+app.use((req, res, next) => {
+  if (path.extname(req.path).length) {
+    const err = new Error('Not found')
+    err.status = 404
+    next(err)
+  } else {
+    next()
+  }
+});
 
 // Error handling endware
 app.use(( err, req, res, next) => {
@@ -106,8 +106,6 @@ app.use(( err, req, res, next) => {
 ***************************************************/
 require('./controllers/signup.js')(app);
 require('./controllers/receipt.js')(app);
-//require('./controllers/taggun.js')(app);
-//require('./receipts.js')(app);
 require('./controllers/index.js')(app)
 
 

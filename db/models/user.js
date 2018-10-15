@@ -46,13 +46,8 @@ module.exports = (sequelize, DataTypes) => {
      field: 'userRecoveryToken'
  });
 
- // For recovery_token field
- SequelizeTokenify.tokenify(User, {
-     field: 'userRecoveryToken'
- });
   User.associate = function(models) {
     // associations can be defined here
-    //TODO: test receipt association from the client side
     User.hasMany(models.Receipt)
     User.hasMany(models.Item)
   };

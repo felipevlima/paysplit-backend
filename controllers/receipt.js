@@ -1,13 +1,11 @@
 //const { Receipt } = require('../db/models');
-const fetch = require("fetch")
 const asyncHandler = require('express-async-handler');
 const models = require('../db/models');
 //const Items = require('../db/models/item.js')
 const {runapp} = require('../receipts.js');
 const {convertReceiptFromURL} = require('./taggun.js')
 const request = require('request');
-require('es6-promise').polyfill();
-require('isomorphic-fetch');
+
 
 module.exports = function(app) {
 
@@ -63,35 +61,6 @@ module.exports = function(app) {
       res.json({msg: 'receipt show', recId})
     })
   })
-
-  // app.post('/records', (req, res) => {
-  //   let recURLs = {
-  //     url: req.body.url,
-  //     userToken: req.body.userToken,
-  //     user_id: req.body.user_id
-  //   };
-  //
-  //   const formData = req.body.url => ({
-  //     url: url,
-  //     headers: {
-  //       'x-custom-key': 'string'
-  //     },
-  //     refresh: false,
-  //     incognito: false,
-  //     ipAddress: '32.4.2.223',
-  //     language: 'en'
-  //   }).then((url) => {
-  //   const body = formData(url)
-  //   console.log(body)
-  //   const myRequest = new Request('https://api.taggun.io/api/receipt/v1/verbose/url', {method: 'POST', body: body, headers: { apikey: process.env.TAGKEY }});
-  //   const dataObj = response.data
-  //   console.log(dataObj)
-  //   return dataObj
-  // })
-  // console.log("YAAAS ", dataObj)
-  //
-  // });
-
 
   app.delete('/:id', asyncHandler(async (req, res, next) => {
     await Receipt.destroy({
