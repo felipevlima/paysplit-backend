@@ -23,7 +23,7 @@
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",
     "cookie-parser": "^1.4.3",
-    "dotenv": "^6.0.0",
+    "dotenv": "^6.1.0",
     "es6-promise": "^4.2.5",
     "express": "^4.16.3",
     "express-async-handler": "^1.1.4",
@@ -39,18 +39,5 @@
     "sanitize": "^2.1.0",
     "sequelize": "^4.38.1",
     "sequelize-tokenify": "^0.1.8"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.0.0-beta.40",
-    "@babel/polyfill": "^7.0.0-beta.40",
-    "@babel/preset-env": "^7.0.0-beta.40",
-    "@babel/preset-stage-1": "^7.0.0-beta.40",
-    "@babel/register": "^7.0.0-beta.40",
-    "axios-mock-adapter": "^1.14.1",
-    "babel-eslint": "^8.2.2",
-    "babel-loader": "^7.1.4",
-    "eslint": "^4.18.2",
-    "eslint-config-fullstack": "^3.0.0",
-    "eslint-plugin-react": "^7.7.0"
   }
 }
