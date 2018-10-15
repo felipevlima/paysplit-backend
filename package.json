@@ -39,5 +39,10 @@
     "sanitize": "^2.1.0",
     "sequelize": "^4.38.1",
     "sequelize-tokenify": "^0.1.8"
+  },
+  "devDependencies": {
+    "eslint": "^5.7.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0"
   }
 }
