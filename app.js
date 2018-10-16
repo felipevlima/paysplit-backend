@@ -10,7 +10,6 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const sanitizer = require('sanitize');
 const expressSanitizer = require('express-sanitizer');
-const db = require('./db/models');
 
 /** Import Routes */
 const indexRouter = require('./controllers/index.js');
@@ -59,7 +58,6 @@ app.use((req, res, next) => {
   next();
 });
 
-/** Listen on port number */
 app.listen(PORT, () => {
   console.log('Check Please listening on port', PORT);
 });
