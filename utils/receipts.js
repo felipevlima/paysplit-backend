@@ -1,7 +1,7 @@
 const axios = require('axios');
-const {convertReceiptFromURL} = require('./controllers/taggun');
-const models = require('./db/models');
-const {userToken} = require('./controllers/receipt');
+const { convertReceiptFromURL } = require('../controllers/taggun');
+const models = require('../db/models');
+const { userToken } = require('../controllers/receipt');
 
   //const receiptURLs = {
   //  traderJoe1:
