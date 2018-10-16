@@ -33,7 +33,7 @@ app.use(sanitizer.middleware);
 app.use(expressSanitizer());
 
 /**  SQL Connection */
-const sequelize = new Sequelize(`postgres://${process.env.DBUSER}:${process.env.DBPASSWORD}@localhost:${process.env.PORT}/checkplease`);
+const sequelize = new Sequelize(`postgres://${process.env.DBUSER}:${process.env.DBPASSWORD}@localhost:${process.env.DBPORT}/checkplease`);
 
 sequelize.authenticate()
   .then(() => {
@@ -60,8 +60,6 @@ app.use((req, res, next) => {
 });
 
 /** Listen on port number */
-db.sequelize.sync().then(() => {
-  app.listen(PORT, () => {
-    console.log('Check Please listening on port', PORT);
-  });
+app.listen(PORT, () => {
+  console.log('Check Please listening on port', PORT);
 });

@@ -42,9 +42,9 @@ module.exports = (sequelize, DataTypes) => {
     underscored: true
   });
   // For token field
- // SequelizeTokenify.tokenify(User, {
- //     field: 'userRecoveryToken'
- // });
+ SequelizeTokenify.tokenify(User, {
+     field: 'userRecoveryToken'
+ });
 
   User.associate = function(models) {
     // associations can be defined here

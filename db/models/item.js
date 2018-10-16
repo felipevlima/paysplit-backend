@@ -18,8 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     createdAt: {
       type: DataTypes.DATE
     },
-    updated_at: DataTypes.DATE,
-    deleted_at: DataTypes.DATE
+    updatedAt: DataTypes.DATE,
+    deletedAt: DataTypes.DATE
   }, {
     underscored: true
   });

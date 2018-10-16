@@ -23,21 +23,15 @@ module.exports = {
       url: {
         type: Sequelize.STRING
       },
-      create_at: {
-        type: Sequelize.DATE
-      },
-      updated_at: {
-        type: Sequelize.DATE
-      },
-      deleted_at: {
-        type: Sequelize.DATE
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
       },
       updatedAt: {
         allowNull: false,
+        type: Sequelize.DATE
+      }
+      deletedAt: {
         type: Sequelize.DATE
       }
     });
