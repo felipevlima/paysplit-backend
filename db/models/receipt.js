@@ -1,4 +1,3 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Receipt = sequelize.define('Receipt', {
     id: {
@@ -15,27 +14,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    product: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    price: {
-    type: DataTypes.DECIMAL,
-    allowNull: false
-    },
-    date: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
     location: {
       type: DataTypes.STRING
     },
     url: {
       type: DataTypes.STRING
-    },
-    userToken: {
-      type: DataTypes.STRING,
-      allowNull: false
     },
     created_at: {
       type: DataTypes.DATE
