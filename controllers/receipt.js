@@ -8,13 +8,8 @@ const { convertReceiptFromURL } = require('./taggun.js');
 const router = Router();
 
 router.post('/api/img', (req, res) => {
-  const receiptURLs = {
-    url: req.body.url,
-    userToken: req.body.userToken,
-    user_id: req.body.user_id,
-  };
-  console.log(receiptURLs);
-  runapp(receiptURLs, req.body.user_id);
+  //const receiptURLs = req.body.url
+  runapp(req.body.url, req.body.user_id);
   res.status(200).json({ message: 'Image received successfully' });
 });
 
