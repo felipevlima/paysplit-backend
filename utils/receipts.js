@@ -16,11 +16,8 @@ const {userToken} = require('../controllers/receipt');
 
   const processReceiptData = (receipt, user_key, receiptURL) => {
     console.log('processing receipt')
-    //console.log('User ID: ', user_key)
      //generate receipt array for bulk creation
-    //let itemsArr;
     let RecId = uuidv1();
-    //console.log(receipt);
     for (let item of receipt.numbers) {
 
       let itemsArr = {
@@ -32,8 +29,6 @@ const {userToken} = require('../controllers/receipt');
       }
       console.log('Process Data: ', itemsArr)
       return itemsArr
-     //  if (entry.merchant.length > 2)itemsArr.push(entry)
-     //  break;
      }
     //console.log('receipt processed' itemsArr)
     return itemsArr
@@ -83,13 +78,8 @@ const {userToken} = require('../controllers/receipt');
   }
 
   const runapp = async (url, user_ID) => {
-    // for (let receiptURL of Object.keys(urlArr)) {
-      //let url = urlArr
       let user_key = user_ID
-      //let user_token = url.userToken
-      //console.log('Token', user_token);
       await storeReceiptDataFromURL(url, convertReceiptFromURL, processReceiptData, user_key)
-    // }
     console.log('batch receipt storage complete')
   }
 

@@ -14,7 +14,7 @@ router.post('/api/img', (req, res) => {
 });
 
 // retrieve all items ever scanned
-router.get('/test', async (req, res) => {
+router.get('/all/records', async (req, res) => {
   const everyItemEverPurchased = await models.Receipt.findAll();
   res.json(everyItemEverPurchased);
 });
