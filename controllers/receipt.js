@@ -7,20 +7,20 @@ const { convertReceiptFromURL } = require('./taggun.js');
 
 const router = Router();
 
+ /** Mobile endpoint to retrieve data */
 router.post('/api/img', (req, res) => {
-  //const receiptURLs = req.body.url
   runapp(req.body.url, req.body.user_id);
   res.status(200).json({ message: 'Image received successfully' });
 });
 
-// retrieve all items ever scanned
+/** Retrieve all items ever scanned */
 router.get('/all/records', async (req, res) => {
   const everyItemEverPurchased = await models.Receipt.findAll();
   res.json(everyItemEverPurchased);
 });
 
+/** Create Items */
 router.post('/items', asyncHandler(async (req, res) => {
-  // console.log(req.body)
   const Items = await models.Item.bulkCreate(req.body, { returning: true });
   if (Items.length === 0) {
     return res.send('no entries returned').status(500)
@@ -28,6 +28,7 @@ router.post('/items', asyncHandler(async (req, res) => {
   res.status(201).json(req.body);
 }));
 
+/** Create Receipt */
 router.post('/records', async (req, res) => {
   const newReceipt = req.body
   const savedReceipt = await models.Receipt.create(newReceipt, { returning: true });
@@ -58,11 +59,22 @@ router.put('/receipt/:id/edit', (req, res) => {
     });
 });
 
-router.get('/receipt/:id', (req, res) => {
-  const receiptId = req.params.id;
-  models.Receipt.findById(receiptId).then(() => {
-    res.json({ msg: 'receipt show', receiptId });
-  });
+/** GET Receipt Marchant details */
+router.get('/:id', (req, res) => {
+  const id = req.params.id;
+  models.Receipt.find({
+    where: { id: id, user_id: id }
+  })
+  .then(Receipt => {
+    res.status(200)
+    .json(Receipt)
+  })
+  .catch((err) => {
+    if (err) {
+      res.status(400)
+      .json({msg: 'Error, something went wrong...'})
+    }
+  })
 });
 
 router.delete('/:id', asyncHandler(async (req, res) => {
