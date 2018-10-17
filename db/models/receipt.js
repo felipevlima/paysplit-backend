@@ -20,11 +20,11 @@ module.exports = (sequelize, DataTypes) => {
     url: {
       type: DataTypes.STRING
     },
-    createdAt: {
+    created_at: {
       type: DataTypes.DATE
     },
-    updatedAt: DataTypes.DATE,
-    deletedAt: DataTypes.DATE
+    updated_at: DataTypes.DATE,
+    deleted_at: DataTypes.DATE
 
   }, {
     underscored: true

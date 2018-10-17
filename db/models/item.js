@@ -15,11 +15,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     product: DataTypes.STRING,
     price: DataTypes.DECIMAL,
-    createdAt: {
+    created_at: {
       type: DataTypes.DATE
     },
-    updatedAt: DataTypes.DATE,
-    deletedAt: DataTypes.DATE
+    updated_at: DataTypes.DATE,
+    deleted_at: DataTypes.DATE
   }, {
     underscored: true
   });

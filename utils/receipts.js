@@ -72,11 +72,11 @@ const {userToken} = require('../controllers/receipt');
       let itemsArr = processItemData(receipt, receipt_id)
       //console.log('RECEIPT Items: ', itemsArr);
       console.log('storing receipt')
-      //const storedReceipt = await dbReq.post('/', receiptArr)
-      //const storedItems = await dbReq.post('/', itemsArr)
-      // return storedReceipt.data, storedItems.data
-      // console.log('receipt stored', storedReceipt.data)
-      // console.log('items stored', storedItems.data)
+      const storedReceipt = await dbReq.post('/receipt/records', receiptArr)
+      const storedItems = await dbReq.post('/receipt/items', itemsArr)
+      console.log('receipt stored', storedReceipt.data)
+      console.log('items stored', storedItems.data)
+      return storedReceipt.data, storedItems.data
     } catch (err) {
       console.log(err.message)
     }

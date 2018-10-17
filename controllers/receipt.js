@@ -19,14 +19,32 @@ router.get('/test', async (req, res) => {
   res.json(everyItemEverPurchased);
 });
 
-router.post('/', asyncHandler(async (req, res) => {
+router.post('/items', asyncHandler(async (req, res) => {
   // console.log(req.body)
-  const receipt = await models.Receipt.bulkCreate(req.body, { returning: true });
-  if (receipt.length === 0) {
+  const Items = await models.Item.bulkCreate(req.body, { returning: true });
+  if (Items.length === 0) {
     return res.send('no entries returned').status(500)
   }
   res.status(201).json(req.body);
 }));
+
+router.post('/records', async (req, res) => {
+  const newReceipt = req.body
+  const savedReceipt = await models.Receipt.create(newReceipt, { returning: true });
+
+  /** Early exit if saving receipt fails */
+  if (!savedReceipt) {
+    console.error(`Receipt creation error: ${savedReceipt}`);
+    res.json(savedReceipt);
+  }
+
+    /** Success case where user is created */
+    res.status(200)
+      .json({
+        message: 'Created receipt successfully.',
+        receipt_id: savedReceipt.id
+      })
+})
 
 router.put('/receipt/:id/edit', (req, res) => {
   models.Receipt.update(req.params.id)
