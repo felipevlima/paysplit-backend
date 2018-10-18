@@ -2,15 +2,23 @@
 const asyncHandler = require('express-async-handler');
 const { Router } = require('express');
 const models = require('../db/models');
-const { runapp } = require('../utils/receipts.js');
+const { convertReceipt } = require('../utils/conversion.js');
 
 const router = Router();
 
-// FIXME: Return receipt id
 /** Mobile endpoint to retrieve data */
-router.post('/api/img', (req, res) => {
-  runapp(req.body.url, req.body.user_id);
-  res.status(200).json({ message: 'Image received successfully' });
+router.post('/api/img', async (req, res) => {
+  try {
+    const receiptID = await convertReceipt(req.body.url, req.body.user_id);
+    return res.status(200).json({
+      message: 'Image received successfully',
+      receipt_id: receiptID,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Something has gone wrong! Please try again.',
+    });
+  }
 });
 
 /** Retrieve all items ever scanned */

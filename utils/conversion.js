@@ -106,7 +106,7 @@ const storeReceiptDataFromURL = async (receiptURL, userKey) => {
     const storedItems = await dbReq.post('/receipt/items', itemsArr);
     console.log('receipt stored', storedReceipt.data);
     console.log('items stored', storedItems.data);
-    return (storedReceipt.data, storedItems.data);
+    return storedReceipt.id;
   } catch (err) {
     console.log(err.message);
     return new Error(err.message);
@@ -115,9 +115,9 @@ const storeReceiptDataFromURL = async (receiptURL, userKey) => {
 };
 
 /** Transport data received */
-const runapp = async (url, userID) => {
+const convertReceipt = async (url, userID) => {
   await storeReceiptDataFromURL(url, userID);
   console.log('batch receipt storage complete');
 };
 
-module.exports = { runapp };
+module.exports = { convertReceipt };
