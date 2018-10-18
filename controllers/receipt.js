@@ -7,6 +7,7 @@ const { convertReceiptFromURL } = require('./taggun.js');
 
 const router = Router();
 
+ // FIXME: Return receipt id
  /** Mobile endpoint to retrieve data */
 router.post('/api/img', (req, res) => {
   runapp(req.body.url, req.body.user_id);
@@ -47,7 +48,7 @@ router.post('/records', async (req, res) => {
       })
 })
 
-router.put('/receipt/:id/edit', (req, res) => {
+router.put('/:id/edit', (req, res) => {
   models.Receipt.update(req.params.id)
     .then((receipt) => {
       res.status(200).json({ receipt });
@@ -63,7 +64,7 @@ router.put('/receipt/:id/edit', (req, res) => {
 router.get('/:id', (req, res) => {
   const id = req.params.id;
   models.Receipt.find({
-    where: { id: id, user_id: id }
+    where: { id: id}
   })
   .then(Receipt => {
     res.status(200)
@@ -73,6 +74,26 @@ router.get('/:id', (req, res) => {
     if (err) {
       res.status(400)
       .json({msg: 'Error, something went wrong...'})
+    }
+  })
+});
+
+/** GET Items product details */
+router.get('/item/:receipt_id', (req, res) => {
+  models.Item.findAll({
+    where: {
+      receipt_id : req.params.receipt_id
+     }
+  })
+  .then(Items => {
+    res.status(200)
+    .json(Items)
+  })
+  .catch((err) => {
+    if (err) {
+      console.log(err)
+      res.status(400)
+      .json({mgs: 'Error, something when wrong!'})
     }
   })
 });
