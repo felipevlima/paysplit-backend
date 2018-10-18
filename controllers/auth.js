@@ -32,7 +32,6 @@ router.post('/signup', async (req, res) => {
   /** Check if user exist already */
   const checkUser = await models.User.findOne({ where: { email: req.body.email } });
   if (checkUser) {
-    // FIXME: This is not safe!
     return res.status(422)
       .json({ message: 'User with that email already exist' });
   }
