@@ -15,7 +15,7 @@ router.post('/api/img', (req, res) => {
 });
 
 /** Retrieve all items ever scanned */
-router.get('/all/records', async (req, res) => {
+router.get('/api/records', async (req, res) => {
   const everyItemEverPurchased = await models.Receipt.findAll();
   res.json(everyItemEverPurchased);
 });
@@ -98,6 +98,7 @@ router.get('/item/:receipt_id', (req, res) => {
   })
 });
 
+/** Delete Receipt */
 router.delete('/:id', asyncHandler(async (req, res) => {
   await models.Receipt.destroy({
     where: { id: req.params.id },
