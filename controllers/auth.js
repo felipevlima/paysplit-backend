@@ -71,7 +71,7 @@ router.post('/login', async (req, res) => {
   const user = await models.User.findOne({ where: { email: req.body.email } });
 
   if (!user) {
-    return res.status(403)
+    return res.status(401)
       .json({ message: 'Bad credential, please try again.' });
   }
 
