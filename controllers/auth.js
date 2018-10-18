@@ -8,13 +8,6 @@ const models = require('../db/models');
 
 const router = Router();
 
-// const sessionChecker = (req, res, next) => {
-//   if (req.session.user && req.cookies.user_id) {
-//     res.redirect('/');
-//   }
-//   next();
-// };
-
 /**
  * Helper function to hash password using bcrypt.
  * @param {string} password The password to be hashed.
@@ -36,6 +29,13 @@ const hashPassword = async function (password) {
  * Signup Routes
  */
 router.post('/signup', async (req, res) => {
+  /** Get the user to compare password */
+  const checkUser = await models.User.findOne({ where: { email: req.body.email } });
+  if (checkUser) {
+    // FIXME: This is not safe!
+    console.log('User already exist');
+    return res.json(404);
+  }
   const hash = await hashPassword(req.body.password);
   const newUser = {
     firstName: req.body.firstName,
