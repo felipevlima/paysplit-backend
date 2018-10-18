@@ -33,8 +33,8 @@ router.post('/signup', async (req, res) => {
   const checkUser = await models.User.findOne({ where: { email: req.body.email } });
   if (checkUser) {
     // FIXME: This is not safe!
-    console.log('User already exist');
-    return res.json(404);
+    return res.status(409)
+      .json({ message: 'User already exist' });
   }
   const hash = await hashPassword(req.body.password);
   const newUser = {
@@ -54,7 +54,7 @@ router.post('/signup', async (req, res) => {
 
   /** Success case where user is created */
   const token = jwt.sign({ _id: newUser.id }, process.env.SECRETKEY, { expiresIn: '60 days' });
-  res.status(200)
+  return res.status(200)
     .cookie('nToken', token, { maxAge: 900000, httpOnly: true })
     .json({
       message: 'Created user successfully.',
