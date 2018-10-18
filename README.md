@@ -16,7 +16,7 @@ PaySplit is an app that utilizes AI to allow users to create digital copy of giv
 PORT=8080 
 DBUSER=elliotbriant  [Your root name]
 DBPASSWORD=password!  [your postgress password]
-DBPORT=5432
+DBHOST=5432
 SECRETKEY=AnythingYouWAnt
 TAGKEY=8a4d98a0b47311e8b187f3e9d1401099
 ``` 
