@@ -72,7 +72,6 @@ router.post('/login', async (req, res) => {
   const user = await models.User.findOne({ where: { email: req.body.email } });
 
   if (!user) {
-    // FIXME: This is not safe!
     return res.status(403)
       .json({ message: 'Bad credential, please try again.' });
   }
