@@ -29,7 +29,7 @@ const hashPassword = async function (password) {
  * Signup Routes
  */
 router.post('/signup', async (req, res) => {
-  /** Get the user to compare password */
+  /** Check if user exist already */
   const checkUser = await models.User.findOne({ where: { email: req.body.email } });
   if (checkUser) {
     // FIXME: This is not safe!
