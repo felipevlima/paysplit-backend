@@ -33,8 +33,8 @@ router.post('/signup', async (req, res) => {
   const checkUser = await models.User.findOne({ where: { email: req.body.email } });
   if (checkUser) {
     // FIXME: This is not safe!
-    return res.status(409)
-      .json({ message: 'User already exist' });
+    return res.status(422)
+      .json({ message: 'User with that email already exist' });
   }
   const hash = await hashPassword(req.body.password);
   const newUser = {
