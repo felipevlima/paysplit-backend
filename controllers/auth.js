@@ -8,13 +8,6 @@ const models = require('../db/models');
 
 const router = Router();
 
-// const sessionChecker = (req, res, next) => {
-//   if (req.session.user && req.cookies.user_id) {
-//     res.redirect('/');
-//   }
-//   next();
-// };
-
 /**
  * Helper function to hash password using bcrypt.
  * @param {string} password The password to be hashed.
@@ -36,6 +29,12 @@ const hashPassword = async function (password) {
  * Signup Routes
  */
 router.post('/signup', async (req, res) => {
+  /** Check if user exist already */
+  const checkUser = await models.User.findOne({ where: { email: req.body.email } });
+  if (checkUser) {
+    return res.status(422)
+      .json({ message: 'User with that email already exist' });
+  }
   const hash = await hashPassword(req.body.password);
   const newUser = {
     firstName: req.body.firstName,
@@ -45,7 +44,6 @@ router.post('/signup', async (req, res) => {
     password: hash,
   };
   const savedUser = await models.User.create(newUser, { w: 1 });
-
   /** Early exit if saving user fails */
   if (!savedUser) {
     console.error(`User creation error: ${savedUser}`);
@@ -54,7 +52,7 @@ router.post('/signup', async (req, res) => {
 
   /** Success case where user is created */
   const token = jwt.sign({ _id: newUser.id }, process.env.SECRETKEY, { expiresIn: '60 days' });
-  res.status(200)
+  return res.status(200)
     .cookie('nToken', token, { maxAge: 900000, httpOnly: true })
     .json({
       message: 'Created user successfully.',
@@ -73,9 +71,8 @@ router.post('/login', async (req, res) => {
   const user = await models.User.findOne({ where: { email: req.body.email } });
 
   if (!user) {
-    // FIXME: This is not safe!
-    console.log('User not found');
-    return res.json(404);
+    return res.status(401)
+      .json({ message: 'Bad credential, please try again.' });
   }
 
   const result = await bcrypt.compare(req.body.password, user.password);

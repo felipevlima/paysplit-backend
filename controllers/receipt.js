@@ -19,7 +19,6 @@ router.get('/api/records', async (req, res) => {
   res.json(everyItemEverPurchased);
 });
 
-
 /** Create Items */
 router.post('/items', asyncHandler(async (req, res) => {
   const Items = await models.Item.bulkCreate(req.body, { returning: true });
