@@ -6,8 +6,8 @@ const { runapp } = require('../utils/receipts.js');
 
 const router = Router();
 
- // FIXME: Return receipt id
- /** Mobile endpoint to retrieve data */
+// FIXME: Return receipt id
+/** Mobile endpoint to retrieve data */
 router.post('/api/img', (req, res) => {
   runapp(req.body.url, req.body.user_id);
   res.status(200).json({ message: 'Image received successfully' });
@@ -16,21 +16,21 @@ router.post('/api/img', (req, res) => {
 /** Retrieve all items ever scanned */
 router.get('/api/records', async (req, res) => {
   const everyItemEverPurchased = await models.Receipt.findAll();
-  res.json(everyItemEverPurchased);
+  res.status(200).json(everyItemEverPurchased);
 });
 
 /** Create Items */
 router.post('/items', asyncHandler(async (req, res) => {
   const Items = await models.Item.bulkCreate(req.body, { returning: true });
   if (Items.length === 0) {
-    return res.send('no entries returned').status(500)
+    return res.status(500).send('no entries returned');
   }
   return res.status(201).json(req.body);
 }));
 
 /** Create Receipt */
 router.post('/records', async (req, res) => {
-  const newReceipt = req.body
+  const newReceipt = req.body;
   const savedReceipt = await models.Receipt.create(newReceipt, { returning: true });
 
   /** Early exit if saving receipt fails */
@@ -39,13 +39,13 @@ router.post('/records', async (req, res) => {
     res.json(savedReceipt);
   }
 
-    /** Success case where user is created */
-    res.status(200)
-      .json({
-        message: 'Created receipt successfully.',
-        receipt_id: savedReceipt.id
-      })
-})
+  /** Success case where user is created */
+  res.status(200)
+    .json({
+      message: 'Created receipt successfully.',
+      receipt_id: savedReceipt.id,
+    });
+});
 
 router.put('/:id/edit', (req, res) => {
   models.Receipt.update(req.params.id)
@@ -59,40 +59,19 @@ router.put('/:id/edit', (req, res) => {
 
 /** GET Receipt Marchant details */
 router.get('/:id', (req, res) => {
-  const id = req.params.id;
-  models.Receipt.find({
-    where: { id: id}
-  })
-  .then(Receipt => {
-    res.status(200)
-    .json(Receipt)
-  })
-  .catch((err) => {
-    if (err) {
-      res.status(400)
-      .json({msg: 'Error, something went wrong...'})
-    }
-  })
+  models.Receipt.find({ where: { id: req.body.id } })
+    .then(receipt => res.status(200).json(receipt))
+    .catch(() => res.status(400).json({ msg: 'Error, something went wrong...' }));
 });
 
 /** GET Items product details */
 router.get('/item/:receipt_id', (req, res) => {
-  models.Item.findAll({
-    where: {
-      receipt_id : req.params.receipt_id
-     }
-  })
-  .then(Items => {
-    res.status(200)
-    .json(Items)
-  })
-  .catch((err) => {
-    if (err) {
-      console.log(err)
-      res.status(400)
-      .json({mgs: 'Error, something when wrong!'})
-    }
-  })
+  models.Item.findAll({ where: { receipt_id: req.params.receipt_id } })
+    .then(items => res.status(200).json(items))
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json({ mgs: 'Error, something when wrong!' });
+    });
 });
 
 /** Delete Receipt */
