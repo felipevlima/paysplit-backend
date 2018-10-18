@@ -19,21 +19,12 @@ router.get('/api/records', async (req, res) => {
   res.json(everyItemEverPurchased);
 });
 
-<<<<<<< HEAD
 /** Create Items */
 router.post('/items', asyncHandler(async (req, res) => {
   const Items = await models.Item.bulkCreate(req.body, { returning: true });
   if (Items.length === 0) {
     return res.send('no entries returned').status(500)
-=======
-router.post('/', asyncHandler(async (req, res) => {
-  // console.log(req.body)
-  const receipt = await models.Receipt.bulkCreate(req.body, { returning: true });
-  if (receipt.length === 0) {
-    return res.send('no entries returned').status(500);
->>>>>>> develop
   }
-
   return res.status(201).json(req.body);
 }));
 
@@ -66,7 +57,6 @@ router.put('/:id/edit', (req, res) => {
     });
 });
 
-<<<<<<< HEAD
 /** GET Receipt Marchant details */
 router.get('/:id', (req, res) => {
   const id = req.params.id;
@@ -103,12 +93,6 @@ router.get('/item/:receipt_id', (req, res) => {
       .json({mgs: 'Error, something when wrong!'})
     }
   })
-=======
-router.get('/receipt/:id', (req, res) => {
-  const receiptId = req.params.id;
-  models.Receipt.findById(receiptId)
-    .then(() => res.json({ msg: 'receipt show', receiptId }));
->>>>>>> develop
 });
 
 /** Delete Receipt */
