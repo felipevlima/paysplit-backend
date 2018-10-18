@@ -45,7 +45,6 @@ router.post('/signup', async (req, res) => {
     password: hash,
   };
   const savedUser = await models.User.create(newUser, { w: 1 });
-
   /** Early exit if saving user fails */
   if (!savedUser) {
     console.error(`User creation error: ${savedUser}`);
@@ -74,8 +73,8 @@ router.post('/login', async (req, res) => {
 
   if (!user) {
     // FIXME: This is not safe!
-    console.log('User not found');
-    return res.json(404);
+    return res.status(403)
+      .json({ message: 'Bad credential, please try again.' });
   }
 
   const result = await bcrypt.compare(req.body.password, user.password);
