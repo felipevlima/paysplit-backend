@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 const axios = require('axios');
 const uuidv1 = require('uuid/v1');
-const { convertReceiptFromURL } = require('../controllers/taggun');
+const logger = require('../utils/logger');
 
 /** const receiptURLs = {
  traderJoe1: 'http://4hatsandfrugal.com/wp-content/uploads/2015/06/64-dollar-grocery-budget-trader-joes1.jpg',
@@ -11,6 +11,36 @@ const { convertReceiptFromURL } = require('../controllers/taggun');
   traderJoe2: 'https://birdfriendsnesthomes.files.wordpress.com/2015/02/fullsizerender_12.jpg',
 } */
 
+/** Taggun API setup */
+const formData = url => ({
+  url,
+  headers: {
+    'x-custom-key': 'string',
+  },
+  refresh: false,
+  incognito: false,
+  ipAddress: '32.4.2.223',
+  language: 'en',
+});
+
+const convertReceiptFromURL = async (url) => {
+  logger.log('converting receipt');
+  const taggun = axios.create({
+    baseURL: 'https://api.taggun.io/api/',
+    headers: { apikey: process.env.TAGKEY },
+  });
+  const body = formData(url);
+
+  try {
+    const response = await taggun.post('/receipt/v1/verbose/url', body);
+    const dataObj = response.data;
+    // console.log('receipt converted', dataObj)
+    return dataObj;
+  } catch (err) {
+    logger.error(err);
+    return null;
+  }
+};
 
 /** Processing receipt data and Parsing Merchant Details  */
 const processReceiptData = (receipt, userKey, receiptURL) => {
