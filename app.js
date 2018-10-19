@@ -12,10 +12,11 @@ const sanitizer = require('sanitize');
 const expressSanitizer = require('express-sanitizer');
 
 /** Import Routes */
+const { verifyAuthentication } = require('./utils/middleware');
 const indexRouter = require('./controllers/index.js');
 const authRouter = require('./controllers/auth.js');
 const receiptRouter = require('./controllers/receipt.js');
-const { verifyAuthentication } = require('./utils/middleware');
+const invoiceRouter = require('./controllers/invoice.js');
 
 /** Instantiate the server */
 const app = express();
@@ -50,6 +51,7 @@ app.use('/auth', authRouter);
 /** Protected Routes */
 app.use(verifyAuthentication);
 app.use('/receipt', receiptRouter);
+app.use('/invoice', invoiceRouter);
 
 /** Any remaining request with an extension (.js, .css, etc...) send 404 */
 app.use((req, res, next) => {

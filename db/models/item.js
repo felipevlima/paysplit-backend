@@ -32,10 +32,9 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true,
   });
 
-  Item.associate = function(models) {
+  Item.associate = (models) => {
     // associations can be defined here
-    Item.belongsTo(models.Receipt, {foreignKey: 'receipt_id'})
-    //Item.belongsTo(models.Invoice)
+    Item.belongsTo(models.Receipt, { foreignKey: 'receipt_id' });
   };
 
   return Item;

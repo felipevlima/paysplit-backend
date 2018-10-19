@@ -14,6 +14,12 @@ module.exports = {
       receipt_id: {
         type: Sequelize.UUID
       },
+      recipient: {
+        type: Sequelize.STRING
+      },
+      amount: {
+        type: Sequelize.DECIMAL
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

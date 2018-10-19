@@ -6,7 +6,6 @@ const logger = require('../utils/logger');
 const { asyncHandler } = require('../utils/asyncRouteHandler');
 
 const router = Router();
-
 /** Mobile endpoint to retrieve data */
 router.post('/conversion', asyncHandler(async (req, res) => {
   const data = await convertReceipt(req.body.url, req.body.user_id);
