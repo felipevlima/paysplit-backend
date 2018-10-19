@@ -1,27 +1,36 @@
 /* eslint-disable no-console */
 const jwt = require('jsonwebtoken');
+const logger = require('../utils/logger');
+const { respondWith } = require('../utils/clientResponse');
 
 /*
  *  Check for login token on every request
  */
-const verifyAuthentication = (req, res, next) => {
-  // FIXME: Remove cookies and switch to Auth header
-  if (typeof req.cookies.jwtToken === 'undefined' || req.cookies.jwtToken === null) {
-    req.user = null;
-    next();
+const verifyAuthentication = async (req, res, next) => {
+  /** Don't need auth for public files */
+  if (req.path.substring(0, 7) === '/public') {
+    return next();
   }
 
-  const token = req.cookies.nToken;
-  // Synchronous verification
-  try {
-    const decodedToken = jwt.verify(token, process.env.SECRETKEY);
-    console.log(decodedToken);
-    // console.log("***Authenticate***");
-    req.user = decodedToken.payload;
-  } catch (err) {
-    console.log('Authentication Error:', err.message);
+  /**
+   * Get token from Authorization header.
+   * Header format - Authorization: Bearer [token]
+   */
+  if (req.get('Authorization') === undefined) {
+    return respondWith(res, 403);
   }
-  next();
+
+  const authToken = req.get('Authorization').split(' ')[1];
+
+  /** Verify token is valid */
+  try {
+    const verifiedToken = await jwt.verify(authToken, process.env.SECRET);
+    req.token = verifiedToken;
+    return next();
+  } catch (error) {
+    logger.error(`Verify Token Error: ${error}`);
+    return respondWith(res, 401);
+  }
 };
 
 module.exports = {
