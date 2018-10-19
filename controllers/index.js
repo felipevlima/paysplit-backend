@@ -1,6 +1,10 @@
 const { Router } = require('express');
+const { respondWith } = require('../utils/clientResponse');
 
 const router = Router();
+
+/** Simple test route or ping route to check availability */
+router.get('/', (req, res) => respondWith(res, 200));
 
 /** Express sanitizer */
 router.post('/', (req, res) => {

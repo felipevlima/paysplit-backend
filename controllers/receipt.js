@@ -1,93 +1,77 @@
-/* eslint-disable no-console */
-const asyncHandler = require('express-async-handler');
 const { Router } = require('express');
-const models = require('../db/models');
+const { Item, Receipt } = require('../db/models');
 const { convertReceipt } = require('../utils/conversion.js');
+const { respondWith } = require('../utils/clientResponse');
+const logger = require('../utils/logger');
+const { asyncHandler } = require('../utils/asyncRouteHandler');
 
 const router = Router();
 
 /** Mobile endpoint to retrieve data */
-router.post('/api/img', async (req, res) => {
-  try {
-    const receiptID = await convertReceipt(req.body.url, req.body.user_id);
-    return res.status(200).json({
-      message: 'Image received successfully',
-      receipt_id: receiptID,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: 'Something has gone wrong! Please try again.',
-    });
-  }
-});
+router.post('/api/img', asyncHandler(async (req, res) => {
+  const receiptID = await convertReceipt(req.body.url, req.body.user_id);
+  return respondWith(res, 200, ['Image received successfully.'], {
+    receipt_id: receiptID,
+  });
+}));
 
 /** Retrieve all items ever scanned */
-router.get('/api/records', async (req, res) => {
-  const everyItemEverPurchased = await models.Receipt.findAll();
-  res.status(200).json(everyItemEverPurchased);
-});
+router.get('/api/records', asyncHandler(async (req, res) => {
+  const allReceipts = await Receipt.findAll();
+  return respondWith(res, 200, ['Returning all receipts.'], { allReceipts });
+}));
 
 /** Create Items */
 router.post('/items', asyncHandler(async (req, res) => {
-  const Items = await models.Item.bulkCreate(req.body, { returning: true });
-  if (Items.length === 0) {
-    return res.status(500).send('no entries returned');
-  }
-  return res.status(201).json(req.body);
+  const items = await Item.bulkCreate(req.body, { returning: true });
+  /** Check if items found */
+  if (items.length === 0) return respondWith(res, 500);
+
+  const itemIDs = items.map(item => item.id);
+  return respondWith(res, 201, ['All items created!'], { itemIDs });
 }));
 
 /** Create Receipt */
-router.post('/records', async (req, res) => {
-  const newReceipt = req.body;
-  const savedReceipt = await models.Receipt.create(newReceipt, { returning: true });
+router.post('/records', asyncHandler(async (req, res) => {
+  const savedReceipt = await Receipt.create(req.body, { returning: true });
 
   /** Early exit if saving receipt fails */
   if (!savedReceipt) {
-    console.error(`Receipt creation error: ${savedReceipt}`);
-    res.json(savedReceipt);
+    logger.error(`Receipt creation error: ${savedReceipt}`);
+    return respondWith(res, 500);
   }
 
   /** Success case where user is created */
-  res.status(200)
-    .json({
-      message: 'Created receipt successfully.',
-      receipt_id: savedReceipt.id,
-    });
-});
-
-router.put('/:id/edit', (req, res) => {
-  models.Receipt.update(req.params.id)
-    .then((receipt) => {
-      res.status(200).json({ receipt });
-      console.log(`Update successfully: ${receipt}`);
-    }).catch((err) => {
-      if (err) res.status(400).json({ msg: 'ERROR could not update.' });
-    });
-});
+  return respondWith(res, 200, ['Created receipt successfully.'], { receipt_id: savedReceipt.id });
+}));
 
 /** GET Receipt Marchant details */
-router.get('/:id', (req, res) => {
-  models.Receipt.find({ where: { id: req.body.id } })
-    .then(receipt => res.status(200).json(receipt))
-    .catch(() => res.status(400).json({ msg: 'Error, something went wrong...' }));
-});
+router.get('/:id', asyncHandler(async (req, res) => {
+  const receipt = await Receipt.find({ where: { id: req.body.id } });
+  if (!receipt) {
+    return respondWith(res, 404, ['Could not find requested receipt.']);
+  }
+
+  return respondWith(res, 200, ['Returning found receipt'], { receipt });
+}));
 
 /** GET Items product details */
-router.get('/item/:receipt_id', (req, res) => {
-  models.Item.findAll({ where: { receipt_id: req.params.receipt_id } })
-    .then(items => res.status(200).json(items))
-    .catch((err) => {
-      console.log(err);
-      res.status(400).json({ mgs: 'Error, something when wrong!' });
-    });
-});
+router.get('/item/:receipt_id', asyncHandler(async (req, res) => {
+  const items = await Item.findAll({ where: { receipt_id: req.params.receipt_id } });
+  /** If no items found, likely something went wrong internally */
+  if (!items) {
+    const msg = 'Something went wrong fetching all items. Please try your search again.';
+    return respondWith(res, 500, [msg]);
+  }
+
+  return respondWith(res, 200, ['Returning all found items'], { items });
+}));
 
 /** Delete Receipt */
 router.delete('/:id', asyncHandler(async (req, res) => {
-  await models.Receipt.destroy({
-    where: { id: req.params.id },
-  });
-  return res.status(204);
+  /** TODO: find out what is returned by the destroy function */
+  const result = await Receipt.destroy({ where: { id: req.params.id } });
+  return respondWith(res, 204, ['Receipt was successfully deleted.']);
 }));
 
 module.exports = router;

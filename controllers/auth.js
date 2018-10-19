@@ -1,10 +1,11 @@
-/* eslint-disable no-console */
-
 /** Check Please - Signup Rotuer */
 const { Router } = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const models = require('../db/models');
+const logger = require('../utils/logger');
+const { respondWith } = require('../utils/clientResponse');
+const { asyncHandler } = require('../utils/asyncRouteHandler');
 
 const router = Router();
 
@@ -20,7 +21,7 @@ const hashPassword = async function (password) {
 
     return hashedPassword;
   } catch (error) {
-    console.error(`Password hashing error: ${error}`);
+    logger.error(`Password hashing error: ${error}`);
     return '';
   }
 };
@@ -28,13 +29,13 @@ const hashPassword = async function (password) {
 /**
  * Signup Routes
  */
-router.post('/signup', async (req, res) => {
+router.post('/signup', asyncHandler(async (req, res) => {
   /** Check if user exist already */
   const checkUser = await models.User.findOne({ where: { email: req.body.email } });
   if (checkUser) {
-    return res.status(422)
-      .json({ message: 'User with that email already exist' });
+    return respondWith(res, 422, ['User with that email already exist']);
   }
+  /** Hash the user's password and then create a new User */
   const hash = await hashPassword(req.body.password);
   const newUser = {
     firstName: req.body.firstName,
@@ -46,61 +47,46 @@ router.post('/signup', async (req, res) => {
   const savedUser = await models.User.create(newUser, { w: 1 });
   /** Early exit if saving user fails */
   if (!savedUser) {
-    console.error(`User creation error: ${savedUser}`);
-    res.json(savedUser);
+    logger.error(`User creation error: ${savedUser}`);
+    return respondWith(res, 500, ['Something went wrong trying to create the user.']);
   }
 
+  // FIXME: Refresh tokens for expired tokens
   /** Success case where user is created */
   const token = jwt.sign({ _id: newUser.id }, process.env.SECRETKEY, { expiresIn: '60 days' });
-  return res.status(200)
-    .cookie('nToken', token, { maxAge: 900000, httpOnly: true })
-    .json({
-      message: 'Created user successfully.',
-      userRecoveryToken: savedUser.userRecoveryToken,
-      user_id: savedUser.id,
-    });
-});
+  return respondWith(res, 200, ['Created User.'], {
+    auth_token: token,
+    recovery_token: savedUser.userRecoveryToken,
+    user_id: savedUser.id,
+  });
+}));
 
 /**
  * Login Routes
  */
-router.post('/login', async (req, res) => {
-  console.log('email', req.body.email);
+router.post('/login', asyncHandler(async (req, res) => {
+  logger.log('email', req.body.email);
 
   /** Get the user to compare password */
   const user = await models.User.findOne({ where: { email: req.body.email } });
 
   if (!user) {
-    return res.status(401)
-      .json({ message: 'Bad credential, please try again.' });
+    return respondWith(res, 400, ['Invalid credentials, please try again.']);
   }
 
-  const result = await bcrypt.compare(req.body.password, user.password);
+  const passwordMatched = await bcrypt.compare(req.body.password, user.password);
   /** Early exit on non matching credentials */
-  if (!result) {
-    return res.status(400).json({
-      message: 'Invalid credentials, please try again.',
-    });
+  if (!passwordMatched) {
+    return respondWith(res, 400, ['Invalid credentials, please try again.']);
   }
 
   const token = jwt.sign({ _id: user.id }, process.env.SECRETKEY, { expiresIn: '60 days' });
 
-  return res
-    .cookie('nToken', token, { maxAge: 900000, httpOnly: true })
-    .status(200)
-    .json({
-      message: 'user logged in successfully',
-      userRecoveryToken: user.userRecoveryToken,
-      user_id: user.id,
-    });
-});
-
-/**
- * Logout Route
- */
-/* eslint-disable-next-line arrow-body-style */
-router.get('/logout', (req, res) => {
-  return res.clearCookie('jwtToken').send('you are logged out');
-});
+  return respondWith(res, 200, ['User logged in.'], {
+    auth_token: token,
+    recovery_token: user.recovery_token,
+    user_id: user.id,
+  });
+}));
 
 module.exports = router;
