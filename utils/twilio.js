@@ -25,7 +25,7 @@ const createInvoice = async (invoice) => {
   try {
     const storeInvoice = await dbRequest.post('/invoice/create', invoice);
     console.log('STORE INVOICE', storeInvoice);
-    const updateItems = await dbRequest.post('/update/bulk', storeInvoice.id, invoice.receipt_id);
+    const updateItems = await dbRequest.post('/update/bulk', storeInvoice.id, storeInvoice.receipt_id);
     const createText = await sendText(invoice);
     console.log('UPDATED ITEMS: ', updateItems);
     console.log('TEXT: ', createText);

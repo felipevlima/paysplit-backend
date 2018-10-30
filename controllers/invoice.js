@@ -22,27 +22,7 @@ router.post('/sms', async (req, res) => {
 });
 
 /** Create Invoice */
-// router.post('/create', async (req, res) => {
-//   const newInvoice = req.body;
-//   console.log('NEW INVOICE', newInvoice);
-//   const savedInvoice = await models.Invoice.create(newInvoice, { returning: true });
-//   console.log('SAVED ', savedInvoice);
-//   /** Exit if saving invoice fails */
-//   // if (!savedInvoice) {
-//   //   console.error(`Invoice creation error: ${savedInvoice}`);
-//   //   res.json(savedInvoice);
-//   // }
-
-//   /** Success case where invoices is created */
-//   res.status(200)
-//     .json({
-//       message: 'Created receipt successfully.',
-//       invoice_id: savedInvoice.id,
-//     });
-// });
-
-
-router.post('/test', async (req, res) => {
+router.post('/create', async (req, res) => {
   const newInvoice = {
     receipt_id: req.body.receipt_id,
     recipient: req.body.recipient,
@@ -57,27 +37,24 @@ router.post('/test', async (req, res) => {
   return res.status(200)
     .json({
       message: 'Created receipt successfully.',
-      receipt_id: savedInv.id,
+      invoice_id: savedInv.id,
+      receipt_id: savedInv.receipt_id,
     });
 });
 
 /** Update Items to add invoice id */
 router.patch('/update/bulk', (req, res) => {
-  models.Item.findAll({
-    where: { id: { $in: req.body.ids } },
-  })
-    .then(((Items) => {
-      const updatePromises = Items.map(Item => Item.updateAttributes(req.body.invoice_id));
-
-      const updatedItems = models.Sequelize.Promise.all(updatePromises);
-      return updatedItems;
+  const id = req.body.receipt_id;
+  const invoice = req.body.invoice_id;
+  models.Item.update(
+    { invoice_id: invoice },
+    { where: { receipt_id: id } },
+  )
+    .then((updatedRows) => {
+      res.json(updatedRows);
     })
-      .then((updatedItems) => {
-        res.status(200)
-          .json(updatedItems);
-      }))
     .catch((err) => {
-      console.log(err.message);
+      console.log('An error occured', err);
     });
 });
 
