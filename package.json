@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "./clean.sh"
+    "clean": "./clean.sh",
+    "migrate_db": "node_modules/.bin/sequelize db:migrate"
   },
   "repository": {
     "type": "git",
@@ -35,6 +36,7 @@
     "request": "^2.88.0",
     "sanitize": "^2.1.0",
     "sequelize": "^4.38.1",
+    "sequelize-cli": "^5.2.0",
     "sequelize-tokenify": "^0.1.8",
     "uuid": "^3.3.2",
     "winston": "^3.1.0"
