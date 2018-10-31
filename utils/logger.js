@@ -6,7 +6,11 @@
  * @requires {@link https://www.npmjs.com/package/winston Winston}
  */
 
-const { createLogger, format, transports } = require('winston');
+const {
+  createLogger,
+  format,
+  transports,
+} = require('winston');
 
 /**
  * @constant {Winston.logger} Logger The configured logging utility. It is
@@ -14,7 +18,10 @@ const { createLogger, format, transports } = require('winston');
  */
 const logger = createLogger({
   level: 'info',
-  format: format.json(),
+  format: format.combine(
+    format.timestamp(),
+    format.prettyPrint(),
+  ),
   transports: [
     // Write to all logs with info level and below to `combined.log`
     // Write all errors to `error.log`
@@ -27,7 +34,7 @@ const logger = createLogger({
  * When not in production, add the Console as a transport layer. Adding
  * the Console makes it easier to debug when trying to track down errors.
  */
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV !== 'production' || process.env.NODE_ENV !== 'test') {
   logger.add(new transports.Console({
     format: format.simple(),
   }));

@@ -4,31 +4,35 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
-      allowNull: false
+      allowNull: false,
     },
     user_id: {
       type: DataTypes.UUID,
-      allowNull: false
+      allowNull: false,
     },
     merchant: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     location: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     url: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
-    created_at: {
-      type: DataTypes.DATE
+    createdAt: {
+      type: DataTypes.DATE,
     },
-    updated_at: DataTypes.DATE,
-    deleted_at: DataTypes.DATE
-
+    updatedAt: {
+      type: DataTypes.DATE,
+    },
+    deletedAt: {
+      type: DataTypes.DATE,
+    },
   }, {
-    underscored: true
+    timestamps: true,
   });
+
   Receipt.associate = function(models) {
     // associations can be defined here
     Receipt.belongsTo(models.User, {
@@ -36,5 +40,6 @@ module.exports = (sequelize, DataTypes) => {
    })
     Receipt.hasMany(models.Item)
   };
+  
   return Receipt;
 };

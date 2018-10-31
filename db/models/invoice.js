@@ -4,25 +4,28 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
-      allowNull: false
+      allowNull: false,
     },
     receipt_id: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
-      allowNull: false
-  },
-   created_at: {
-    type: DataTypes.DATE
-  },
-   updated_at: DataTypes.DATE
- }, {
-    underscored: true
-  })
+      allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+    },
+  }, {
+    timestamps: true,
+  });
 
   Invoice.associate = function(models) {
     // associations can be defined here
     Invoice.belongsTo(models.User)
   };
+  
   return Invoice;
 };
