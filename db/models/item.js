@@ -4,30 +4,39 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
-      allowNull: false
+      allowNull: false,
     },
     receipt_id: {
       type: DataTypes.UUID,
-      allowNull: false
+      allowNull: false,
     },
     invoice_id: {
       type: DataTypes.UUID,
     },
-    product: DataTypes.STRING,
-    price: DataTypes.DECIMAL,
-    created_at: {
-      type: DataTypes.DATE
+    product: {
+      type: DataTypes.STRING,
     },
-    updated_at: DataTypes.DATE,
-    deleted_at: DataTypes.DATE
+    price: {
+      type: DataTypes.DECIMAL,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+    },
+    deletedAt: {
+      type: DataTypes.DATE,
+    },
   }, {
-    underscored: true
+    timestamps: true,
   });
+
   Item.associate = function(models) {
     // associations can be defined here
     Item.belongsTo(models.Receipt, {foreignKey: 'receipt_id'})
     //Item.belongsTo(models.Invoice)
-
   };
+
   return Item;
 };
