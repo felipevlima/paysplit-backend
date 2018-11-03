@@ -1,10 +1,23 @@
 /** Check Please - Signup Rotuer */
 const { Router } = require('express');
-const models = require('../db/models');
+const { Invoice } = require('../db/models');
 const { convertInvoice } = require('../utils/twilio');
+const logger = require('../utils/logger');
+const { asyncHandler } = require('../utils/asyncRouteHandler');
+const { respondWith } = ('../utils/clientResponse');
 
 const router = Router();
-// receives data from app
+
+/** Mobile endpoint to retrieve data  */
+router.post('/smsconvert', asyncHandler(async (req, res) => {
+  const data = await convertInvoice(req.body.receipt_id, req.body.amount, req.body.recipient, req.body.msg);
+
+  if (data === undefined) {
+    return respondWith(res, 500, ['An error occured while converting the invoice.']);
+  }
+  return respondWith(res, 200, 'Invoice received successfully.', data);
+}));
+
 router.post('/sms', async (req, res) => {
   const data = {
     receipt_id: req.body.receipt_id,
@@ -21,6 +34,21 @@ router.post('/sms', async (req, res) => {
   });
 });
 
+/** Retrieve every Invoice stored */
+router.get('/records', asyncHandler(async (req, res) => {
+  const allInvoices = await Invoice.findAll();
+  return respondWith(res, 200, ['Retruning all receipts.'], { allInvoices });
+}));
+
+/** GET Invoices details */
+router.get('/:id', asyncHandler(async (req, res) => {
+  const invoice = await Invoice.find({ where: { id: req.body.id } });
+  if (!invoice) {
+    return respondWith(res, 404, ['Could not find requested invoice.']);
+  }
+  return respondWith(res, 200, ['Returning found invoice.'], { invoice });
+}));
+
 /** Create Invoice */
 router.post('/create', async (req, res) => {
   const newInvoice = {
@@ -28,7 +56,7 @@ router.post('/create', async (req, res) => {
     recipient: req.body.recipient,
     amount: req.body.amount,
   };
-  const savedInv = await models.Invoice.create(newInvoice, { returning: true });
+  const savedInv = await Invoice.create(newInvoice, { returning: true });
   if (!savedInv) {
     console.error(`Invoice creation error: ${savedInv}`);
     res.json(savedInv);
