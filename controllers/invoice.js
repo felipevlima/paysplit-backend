@@ -1,9 +1,9 @@
 /** Check Please - Signup Rotuer */
 const { Router } = require('express');
-const { Invoice } = require('../db/models');
+const { Invoice, Item } = require('../db/models');
 const { convertInvoice } = require('../utils/twilio');
-const logger = require('../utils/logger');
 const { asyncHandler } = require('../utils/asyncRouteHandler');
+
 const { respondWith } = ('../utils/clientResponse');
 
 const router = Router();
@@ -49,6 +49,25 @@ router.get('/:id', asyncHandler(async (req, res) => {
   return respondWith(res, 200, ['Returning found invoice.'], { invoice });
 }));
 
+/** GET Items invoice details */
+router.get('/item/:invoice_id', asyncHandler(async (req, res) => {
+  const items = await Item.findAll({ where: { invoice_id: req.params.invoice_id } });
+
+  /** If no items found, likely internal server error */
+  if (!items) {
+    const errMsg = 'Somethign went wrong fetching all items. Try again!';
+    return respondWith(res, 500, [errMsg]);
+  }
+  return respondWith(res, 200, ['Returning all found items'], { items });
+}));
+
+/** Delete Invoice  */
+router.delete('/:id', asyncHandler(async (req, res) => {
+  const result = await Invoice.destroy({ where: { id: req.params.id } });
+  return respondWith(res, 204, ['Invoice was successfuly deleted.'], { result });
+}));
+
+
 /** Create Invoice */
 router.post('/create', async (req, res) => {
   const newInvoice = {
@@ -74,7 +93,7 @@ router.post('/create', async (req, res) => {
 router.patch('/update/bulk', (req, res) => {
   const id = req.body.receipt_id;
   const invoice = req.body.invoice_id;
-  models.Item.update(
+  Item.update(
     { invoice_id: invoice },
     { where: { receipt_id: id } },
   )

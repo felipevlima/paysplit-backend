@@ -49,7 +49,7 @@ router.get('/item/:receipt_id', asyncHandler(async (req, res) => {
 router.delete('/:id', asyncHandler(async (req, res) => {
   /** TODO: find out what is returned by the destroy function */
   const result = await Receipt.destroy({ where: { id: req.params.id } });
-  return respondWith(res, 204, ['Receipt was successfully deleted.']);
+  return respondWith(res, 204, ['Receipt was successfully deleted.'], { result });
 }));
 
 module.exports = router;
