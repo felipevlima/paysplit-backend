@@ -6,7 +6,6 @@ const logger = require('../utils/logger');
 const { asyncHandler } = require('../utils/asyncRouteHandler');
 
 const router = Router();
-
 /** Mobile endpoint to retrieve data */
 router.post('/conversion', asyncHandler(async (req, res) => {
   const data = await convertReceipt(req.body.url, req.body.user_id);
@@ -50,7 +49,7 @@ router.get('/item/:receipt_id', asyncHandler(async (req, res) => {
 router.delete('/:id', asyncHandler(async (req, res) => {
   /** TODO: find out what is returned by the destroy function */
   const result = await Receipt.destroy({ where: { id: req.params.id } });
-  return respondWith(res, 204, ['Receipt was successfully deleted.']);
+  return respondWith(res, 204, ['Receipt was successfully deleted.'], { result });
 }));
 
 module.exports = router;

@@ -12,6 +12,14 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
     },
+    recipient: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    amount: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     createdAt: {
       type: DataTypes.DATE,
     },
@@ -22,10 +30,10 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true,
   });
 
-  Invoice.associate = function(models) {
+  Invoice.associate = (models) => {
     // associations can be defined here
-    Invoice.belongsTo(models.User)
+    Invoice.belongsTo(models.Item);
   };
-  
+
   return Invoice;
 };

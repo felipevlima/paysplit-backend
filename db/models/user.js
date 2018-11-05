@@ -44,15 +44,13 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     timestamps: true,
   });
-  // For token field
+  /** For userRecoveryToken field */
   SequelizeTokenify.tokenify(User, { field: 'userRecoveryToken' });
 
-  User.associate = function(models) {
-    // associations can be defined here
-    //User.hasMany(models.recoveryToken)
-    User.hasMany(models.Receipt)
-    User.hasMany(models.Item)
-    //User.hasMany(models.Invoice)
+  User.associate = (models) => {
+  // associations can be defined here
+    User.hasMany(models.Receipt);
+    User.hasMany(models.Item);
   };
 
   return User;

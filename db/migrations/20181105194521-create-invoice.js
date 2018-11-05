@@ -12,7 +12,16 @@ module.exports = {
         type: Sequelize.UUID
       },
       receipt_id: {
-        type: Sequelize.UUID
+        type: Sequelize.UUID,
+        allowNull: false,
+      },
+      recipient: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      amount: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
