@@ -1,3 +1,4 @@
+require('dotenv').config();
 const axios = require('axios');
 const logger = require('../utils/logger');
 const { sendText } = require('./twilio');
@@ -23,7 +24,9 @@ const storeInvoiceInfo = async (data) => {
       { where: { receipt_id: data.receipt_id } },
       { returning: true },
     );
-    console.log('ITEM', item);
+    const sendToTwillio = await sendText(data);
+    //console.log('ITEM', item);
+    console.log('TEXT ', sendToTwillio);
     return {
       invoice_id: invoice.id,
       item_ids: item.id,
