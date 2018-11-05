@@ -24,7 +24,7 @@ const verifyAuthentication = async (req, res, next) => {
 
   /** Verify token is valid */
   try {
-    const verifiedToken = await jwt.verify(authToken, process.env.SECRET);
+    const verifiedToken = await jwt.verify(authToken, process.env.SECRETKEY);
     req.token = verifiedToken;
     return next();
   } catch (error) {

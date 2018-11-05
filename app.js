@@ -15,6 +15,7 @@ const expressSanitizer = require('express-sanitizer');
 const indexRouter = require('./controllers/index.js');
 const authRouter = require('./controllers/auth.js');
 const receiptRouter = require('./controllers/receipt.js');
+const { verifyAuthentication } = require('./utils/middleware');
 
 /** Instantiate the server */
 const app = express();
@@ -45,6 +46,9 @@ sequelize.authenticate()
 /** Set up routes */
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
+
+/** Protected Routes */
+app.use(verifyAuthentication);
 app.use('/receipt', receiptRouter);
 
 /** Any remaining request with an extension (.js, .css, etc...) send 404 */
