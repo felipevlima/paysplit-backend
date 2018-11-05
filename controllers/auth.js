@@ -7,6 +7,7 @@ const logger = require('../utils/logger');
 const { respondWith } = require('../utils/clientResponse');
 const { asyncHandler } = require('../utils/asyncRouteHandler');
 
+
 const router = Router();
 
 /**
@@ -88,5 +89,16 @@ router.post('/login', asyncHandler(async (req, res) => {
     user_id: user.id,
   });
 }));
+
+/** Find User by Id */
+router.get('/:id', async (req, res) => {
+  const User = await models.User.findById(req.params.id);
+  return respondWith(res, 200, ['User found'], {
+    firstName: User.firstName,
+    lastName: User.lastName,
+    phoneNumber: User.phoneNumber,
+    email: User.email,
+  });
+});
 
 module.exports = router;
