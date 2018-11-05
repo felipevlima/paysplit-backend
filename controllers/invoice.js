@@ -19,6 +19,7 @@ router.post('/smsconvert', asyncHandler(async (req, res) => {
   };
   const data = await convertInvoice(test);
   if (!data) {
+    logger.error(data);
     return respondWith(res, 500, ['An error occured while converting the invoice.']);
   }
   return respondWith(res, 200, 'Invoice received successfully.', data);
@@ -45,6 +46,7 @@ router.get('/item/:invoice_id', asyncHandler(async (req, res) => {
 
   /** If no items found, likely internal server error */
   if (!items) {
+    logger.error(items);
     const errMsg = 'Somethign went wrong fetching all items. Try again!';
     return respondWith(res, 500, [errMsg]);
   }
