@@ -1,12 +1,7 @@
 require('dotenv').config();
-const axios = require('axios');
 const logger = require('../utils/logger');
 const { sendText } = require('./twilio');
 const { Invoice, Item } = require('../db/models');
-
-// const dbRequest = axios.create({
-//   baseURL: 'http://localhost:8080/invoice',
-// });
 
 /** Calling database endoipoit to store data */
 const storeInvoiceInfo = async (data) => {
@@ -25,11 +20,10 @@ const storeInvoiceInfo = async (data) => {
       { returning: true },
     );
     const sendToTwillio = await sendText(data);
-    //console.log('ITEM', item);
-    console.log('TEXT ', sendToTwillio);
     return {
       invoice_id: invoice.id,
       item_ids: item.id,
+      sendToTwillio,
     };
   } catch (err) {
     logger.error(err);
@@ -37,25 +31,7 @@ const storeInvoiceInfo = async (data) => {
   }
 };
 
-// const createInvoice = async (invoice) => {
-//   const dbRequest = axios.create({
-//     baseURL: 'http://localhost:8080',
-//   });
-//   try {
-//     const storeInvoice = await dbRequest.post('/invoice/create', invoice);
-//     // console.log('STORE INVOICE', storeInvoice);
-//     const updateItems = await dbRequest.patch('/update/bulk', storeInvoice.id, storeInvoice.receipt_id);
-//     console.log('YOOOOO', invoice);
-//     const createText = await sendText(invoice);
-//     console.log('UPDATED ITEMS: ', updateItems);
-//     //console.log('TEXT: ', createText);
-//     return storeInvoice.id;
-//   } catch (err) {
-//     logger.error(err);
-//     return undefined;
-//   }
-// };
-
+/** Converting invoices */
 const convertInvoice = async (data) => {
   logger.info(data);
   const ids = await storeInvoiceInfo(data);

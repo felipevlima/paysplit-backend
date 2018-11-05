@@ -2,6 +2,7 @@
 require('dotenv').config();
 const Twilio = require('twilio');
 
+/** Calling Twillio API to text recipients */
 const sendText = async (data) => {
   const accountSid = process.env.ACCSID;
   const authToken = process.env.TWILIOTOKEN;

@@ -24,22 +24,6 @@ router.post('/smsconvert', asyncHandler(async (req, res) => {
   return respondWith(res, 200, 'Invoice received successfully.', data);
 }));
 
-// router.post('/sms', async (req, res) => {
-//   const data = {
-//     receipt_id: req.body.receipt_id,
-//     amount: req.body.amount,
-//     recipient: req.body.recipient,
-//     msg: req.body.msg,
-//   };
-//   console.log(data);
-//   const invoiceRecord = await convertInvoice(data);
-//   console.log(invoiceRecord);
-//   return res.status(200).json({
-//     message: 'Invoice received successfully',
-//     invoice_id: invoiceRecord,
-//   });
-// });
-
 /** Retrieve every Invoice stored */
 router.get('/records', asyncHandler(async (req, res) => {
   const allInvoices = await Invoice.findAll();
@@ -72,42 +56,5 @@ router.delete('/:id', asyncHandler(async (req, res) => {
   const result = await Invoice.destroy({ where: { id: req.params.id } });
   return respondWith(res, 204, ['Invoice was successfuly deleted.'], { result });
 }));
-
-
-/** Create Invoice */
-router.post('/create', async (req, res) => {
-  const newInvoice = {
-    receipt_id: req.body.receipt_id,
-    recipient: req.body.recipient,
-    amount: req.body.amount,
-  };
-  const savedInv = await Invoice.create(newInvoice, { returning: true });
-  if (!savedInv) {
-    return respondWith(res, 500, ['An error occured during the creation of the invoice']);
-  }
-  /** Success case where user is created */
-  return res.status(200)
-    .json({
-      message: 'Created receipt successfully.',
-      invoice_id: savedInv.id,
-      receipt_id: savedInv.receipt_id,
-    });
-});
-
-/** Update Items to add invoice id */
-router.patch('/update/bulk', (req, res) => {
-  const id = req.body.receipt_id;
-  const invoice = req.body.invoice_id;
-  Item.update(
-    { invoice_id: invoice },
-    { where: { receipt_id: id } },
-  )
-    .then((updatedRows) => {
-      res.json(updatedRows);
-    })
-    .catch((err) => {
-      logger.error(err);
-    });
-});
 
 module.exports = router;
