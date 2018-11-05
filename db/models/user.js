@@ -1,5 +1,4 @@
-var SequelizeTokenify = require('sequelize-tokenify');
-
+const SequelizeTokenify = require('sequelize-tokenify');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
@@ -7,49 +6,51 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
-      allowNull: false
+      allowNull: false,
     },
     firstName: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     lastName: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     phoneNumber: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     userRecoveryToken: {
       type: DataTypes.STRING,
-      unique: true
+      unique: true,
     },
-    created_at: {
-      type: DataTypes.DATE
+    createdAt: {
+      type: DataTypes.DATE,
     },
-    updated_at: DataTypes.DATE,
-    deleted_at: DataTypes.DATE
+    updatedAt: {
+      type: DataTypes.DATE,
+    },
+    deletedAt: {
+      type: DataTypes.DATE,
+    },
   }, {
-    underscored: true
+    timestamps: true,
   });
-  // For token field
- SequelizeTokenify.tokenify(User, {
-     field: 'userRecoveryToken'
- });
+  /** For userRecoveryToken field */
+  SequelizeTokenify.tokenify(User, { field: 'userRecoveryToken' });
 
-  User.associate = function(models) {
-    // associations can be defined here
-    User.hasMany(models.Receipt)
-    User.hasMany(models.Item)
+  User.associate = (models) => {
+  // associations can be defined here
+    User.hasMany(models.Receipt);
+    User.hasMany(models.Item);
   };
 
   return User;

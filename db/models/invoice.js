@@ -1,24 +1,24 @@
 module.exports = (sequelize, DataTypes) => {
-  const Receipt = sequelize.define('Receipt', {
+  const Invoice = sequelize.define('Invoices', {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
     },
-    user_id: {
+    receipt_id: {
       type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false,
     },
-    merchant: {
+    recipient: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    location: {
+    amount: {
       type: DataTypes.STRING,
-    },
-    url: {
-      type: DataTypes.STRING,
+      allowNull: false,
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -26,20 +26,14 @@ module.exports = (sequelize, DataTypes) => {
     updatedAt: {
       type: DataTypes.DATE,
     },
-    deletedAt: {
-      type: DataTypes.DATE,
-    },
   }, {
     timestamps: true,
   });
 
-  Receipt.associate = function(models) {
+  Invoice.associate = (models) => {
     // associations can be defined here
-    Receipt.belongsTo(models.User, {
-    foreignKey: 'user_id'
-   })
-    Receipt.hasMany(models.Item)
+    Invoice.belongsTo(models.Item);
   };
-  
-  return Receipt;
+
+  return Invoice;
 };
