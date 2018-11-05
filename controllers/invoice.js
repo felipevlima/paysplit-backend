@@ -1,38 +1,44 @@
 /** Check Please - Signup Rotuer */
 const { Router } = require('express');
 const { Invoice, Item } = require('../db/models');
-const { convertInvoice } = require('../utils/twilio');
+const { convertInvoice } = require('../utils/InvoiceConversion');
 const { asyncHandler } = require('../utils/asyncRouteHandler');
 
-const { respondWith } = ('../utils/clientResponse');
+const logger = require('../utils/logger');
+const { respondWith } = require('../utils/clientResponse');
 
 const router = Router();
 
 /** Mobile endpoint to retrieve data  */
 router.post('/smsconvert', asyncHandler(async (req, res) => {
-  const data = await convertInvoice(req.body.receipt_id, req.body.amount, req.body.recipient, req.body.msg);
-
-  if (data === undefined) {
-    return respondWith(res, 500, ['An error occured while converting the invoice.']);
-  }
-  return respondWith(res, 200, 'Invoice received successfully.', data);
-}));
-
-router.post('/sms', async (req, res) => {
-  const data = {
+  const test = {
     receipt_id: req.body.receipt_id,
     amount: req.body.amount,
     recipient: req.body.recipient,
     msg: req.body.msg,
   };
-  console.log(data);
-  const invoiceRecord = await convertInvoice(data);
-  console.log(invoiceRecord);
-  return res.status(200).json({
-    message: 'Invoice received successfully',
-    invoice_id: invoiceRecord,
-  });
-});
+  const data = await convertInvoice(test);
+  if (!data) {
+    return respondWith(res, 500, ['An error occured while converting the invoice.']);
+  }
+  return respondWith(res, 200, 'Invoice received successfully.', data);
+}));
+
+// router.post('/sms', async (req, res) => {
+//   const data = {
+//     receipt_id: req.body.receipt_id,
+//     amount: req.body.amount,
+//     recipient: req.body.recipient,
+//     msg: req.body.msg,
+//   };
+//   console.log(data);
+//   const invoiceRecord = await convertInvoice(data);
+//   console.log(invoiceRecord);
+//   return res.status(200).json({
+//     message: 'Invoice received successfully',
+//     invoice_id: invoiceRecord,
+//   });
+// });
 
 /** Retrieve every Invoice stored */
 router.get('/records', asyncHandler(async (req, res) => {
@@ -77,8 +83,7 @@ router.post('/create', async (req, res) => {
   };
   const savedInv = await Invoice.create(newInvoice, { returning: true });
   if (!savedInv) {
-    console.error(`Invoice creation error: ${savedInv}`);
-    res.json(savedInv);
+    return respondWith(res, 500, ['An error occured during the creation of the invoice']);
   }
   /** Success case where user is created */
   return res.status(200)
@@ -101,7 +106,7 @@ router.patch('/update/bulk', (req, res) => {
       res.json(updatedRows);
     })
     .catch((err) => {
-      console.log('An error occured', err);
+      logger.error(err);
     });
 });
 

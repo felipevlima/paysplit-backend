@@ -14,9 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     recipient: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     amount: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -32,6 +34,6 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     Invoice.belongsTo(models.Item);
   };
-  
+
   return Invoice;
 };
