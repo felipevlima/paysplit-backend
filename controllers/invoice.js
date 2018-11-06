@@ -1,7 +1,7 @@
 /** Check Please - Signup Rotuer */
 const { Router } = require('express');
 const { Invoice, Item } = require('../db/models');
-const { convertInvoice } = require('../utils/InvoiceConversion');
+const { transportInvoice } = require('../utils/InvoiceConversion');
 const { asyncHandler } = require('../utils/asyncRouteHandler');
 
 const logger = require('../utils/logger');
@@ -11,13 +11,13 @@ const router = Router();
 
 /** Mobile endpoint to retrieve data  */
 router.post('/smsconvert', asyncHandler(async (req, res) => {
-  const test = {
+  const invoiceData = {
     receipt_id: req.body.receipt_id,
     amount: req.body.amount,
     recipient: req.body.recipient,
     msg: req.body.msg,
   };
-  const data = await convertInvoice(test);
+  const data = await transportInvoice(invoiceData);
   if (!data) {
     logger.error(data);
     return respondWith(res, 500, ['An error occured while converting the invoice.']);
