@@ -2,7 +2,7 @@
 const { Router } = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const models = require('../db/models');
+const { User } = require('../db/models');
 const logger = require('../utils/logger');
 const { respondWith } = require('../utils/clientResponse');
 const { asyncHandler } = require('../utils/asyncRouteHandler');
@@ -32,7 +32,7 @@ const hashPassword = async function (password) {
  */
 router.post('/signup', asyncHandler(async (req, res) => {
   /** Check if user exist already */
-  const checkUser = await models.User.findOne({ where: { email: req.body.email } });
+  const checkUser = await User.findOne({ where: { email: req.body.email } });
   if (checkUser) {
     return respondWith(res, 422, ['User with that email already exist']);
   }
@@ -45,7 +45,7 @@ router.post('/signup', asyncHandler(async (req, res) => {
     phoneNumber: req.body.phoneNumber,
     password: hash,
   };
-  const savedUser = await models.User.create(newUser, { w: 1 });
+  const savedUser = await User.create(newUser, { w: 1 });
   /** Early exit if saving user fails */
   if (!savedUser) {
     logger.error(`User creation error: ${savedUser}`);
@@ -69,7 +69,7 @@ router.post('/login', asyncHandler(async (req, res) => {
   logger.log('email', req.body.email);
 
   /** Get the user to compare password */
-  const user = await models.User.findOne({ where: { email: req.body.email } });
+  const user = await User.findOne({ where: { email: req.body.email } });
 
   if (!user) {
     return respondWith(res, 400, ['Invalid credentials, please try again.']);
@@ -89,16 +89,5 @@ router.post('/login', asyncHandler(async (req, res) => {
     user_id: user.id,
   });
 }));
-
-/** Find User by Id */
-router.get('/:id', async (req, res) => {
-  const User = await models.User.findById(req.params.id);
-  return respondWith(res, 200, ['User found'], {
-    firstName: User.firstName,
-    lastName: User.lastName,
-    phoneNumber: User.phoneNumber,
-    email: User.email,
-  });
-});
 
 module.exports = router;
