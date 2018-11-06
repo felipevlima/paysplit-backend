@@ -58,15 +58,13 @@ const storeInvoiceInfo = async (data, firstName) => {
 const transportInvoice = async (data) => {
   logger.info(data);
 
-  /**
-   * Search for the user first name and returns to storeInvoiceInfo
-   */
+  /** Search for the user first name and returns to storeInvoiceInfo */
   const getUsername = await getUser(data);
-  /**
-   * Store data in the database.
-   */
+
+  /** Store data in the database. */
   const invoiceIds = await storeInvoiceInfo(data, getUsername);
   logger.debug(invoiceIds);
+
   console.log('batch of invoice storage complete');
   return invoiceIds;
 };

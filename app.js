@@ -49,7 +49,7 @@ app.use('/', indexRouter);
 app.use('/auth', authRouter);
 
 /** Protected Routes */
-//app.use(verifyAuthentication);
+app.use(verifyAuthentication);
 app.use('/receipt', receiptRouter);
 app.use('/invoice', invoiceRouter);
 
