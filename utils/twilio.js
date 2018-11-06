@@ -1,11 +1,9 @@
 
 require('dotenv').config();
 const Twilio = require('twilio');
-const shortUrl = require('node-url-shortener');
 
 /** Calling Twillio API to text recipients */
-const sendText = async (data, name) => {
-  const firstName = name;
+const sendText = async (data, firstName) => {
   const accountSid = process.env.ACCSID;
   const authToken = process.env.TWILIOTOKEN;
   const convertToDecimal = parseFloat(data.amount).toFixed(2);
