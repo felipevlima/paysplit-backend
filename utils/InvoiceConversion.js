@@ -30,10 +30,11 @@ const storeInvoiceInfo = async (data, firstName) => {
       { returning: true },
     );
     const sendToTwillio = await sendText(data, firstName);
+    console.log(sendToTwillio);
+
     return {
       invoice_id: invoice.id,
       item_ids: item.id,
-      sendToTwillio,
     };
   } catch (err) {
     logger.error(err);
