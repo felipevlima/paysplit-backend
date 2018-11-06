@@ -1,6 +1,7 @@
 
 require('dotenv').config();
 const Twilio = require('twilio');
+const shortUrl = require('node-url-shortener');
 
 /** Calling Twillio API to text recipients */
 const sendText = async (data, name) => {
@@ -9,7 +10,8 @@ const sendText = async (data, name) => {
   const authToken = process.env.TWILIOTOKEN;
   const convertToDecimal = parseFloat(data.amount).toFixed(2);
   const convertMsg = encodeURIComponent(data.msg);
-  const txtMessage = `Hello, ${firstName} requested ${convertToDecimal} via PaySplit  venmo://paycharge?txn=pay&recipients=${data.recipient}&amount=${convertToDecimal}&note=${convertMsg}`;
+  const url = `venmo://paycharge?txn=pay&recipients=${data.recipient}&amount=${convertToDecimal}&note=${convertMsg}`;
+  const txtMessage = `Hi, ${firstName} requested ${convertToDecimal} via PaySplit  ${url}`;
 
   const client = new Twilio(accountSid, authToken);
   const message = await client.messages.create({

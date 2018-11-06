@@ -38,9 +38,9 @@
     "sequelize": "^4.38.1",
     "sequelize-cli": "^5.2.0",
     "sequelize-tokenify": "^0.1.8",
-    "winston": "^3.1.0",
     "twilio": "^3.23.1",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "winston": "^3.1.0"
   },
   "devDependencies": {
     "eslint": "^4.19.0",
