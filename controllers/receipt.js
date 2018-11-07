@@ -25,7 +25,7 @@ router.get('/api/records', asyncHandler(async (req, res) => {
 
 /** GET Receipt Marchant details */
 router.get('/:id', asyncHandler(async (req, res) => {
-  const receipt = await Receipt.find({ where: { id: req.body.id } });
+  const receipt = await Receipt.find({ where: { id: req.params.id } });
   if (!receipt) {
     return respondWith(res, 404, ['Could not find requested receipt.']);
   }
