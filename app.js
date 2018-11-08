@@ -34,7 +34,7 @@ app.use(sanitizer.middleware);
 app.use(expressSanitizer());
 
 /**  SQL Connection */
-const sequelize = new Sequelize(`postgres://${process.env.DBUSER}:${process.env.DBPASSWORD}@localhost:${process.env.DBPORT}/checkplease`);
+const sequelize = new Sequelize(`postgres://${process.env.DBUSER}:${process.env.DBPASSWORD}@localhost:${process.env.DBPORT}/paysplit`);
 
 sequelize.authenticate()
   .then(() => {
@@ -50,8 +50,8 @@ app.use('/auth', authRouter);
 
 /** Protected Routes */
 app.use(verifyAuthentication);
-app.use('/receipt', receiptRouter);
-app.use('/invoice', invoiceRouter);
+app.use('/receipts', receiptRouter);
+app.use('/invoices', invoiceRouter);
 
 /** Any remaining request with an extension (.js, .css, etc...) send 404 */
 app.use((req, res, next) => {
