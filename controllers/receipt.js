@@ -33,7 +33,7 @@ router.get('/:id', asyncHandler(async (req, res) => {
   return respondWith(res, 200, ['Returning found receipt'], { receipt });
 }));
 
-/** GET Items product details */
+/** GET Items product details  TODO: Move to Items controller */
 router.get('/item/:receipt_id', asyncHandler(async (req, res) => {
   const items = await Item.findAll({ where: { receipt_id: req.params.receipt_id } });
   /** If no items found, likely something went wrong internally */
