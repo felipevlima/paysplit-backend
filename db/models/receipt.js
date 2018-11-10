@@ -33,13 +33,11 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true,
   });
 
-  Receipt.associate = function(models) {
+  Receipt.associate = (models) => {
     // associations can be defined here
-    Receipt.belongsTo(models.User, {
-    foreignKey: 'user_id'
-   })
-    Receipt.hasMany(models.Item)
+    Receipt.belongsTo(models.User, { foreignKey: 'user_id' });
+    Receipt.hasMany(models.Item, { foreignKey: 'receipt_id' });
   };
-  
+
   return Receipt;
 };

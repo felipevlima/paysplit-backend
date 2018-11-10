@@ -34,7 +34,8 @@ module.exports = (sequelize, DataTypes) => {
 
   Item.associate = (models) => {
     // associations can be defined here
-    Item.belongsTo(models.Receipt, { foreignKey: 'receipt_id' });
+    Item.belongsTo(models.Receipt);
+    Item.belongsTo(models.Invoice);
   };
 
   return Item;
