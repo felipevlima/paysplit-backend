@@ -1,5 +1,5 @@
 # paysplit-backend
-PaySplit is an app that utilizes AI to allow users to create digital copy of given receipt and split and pay a bill via mobile phone.
+PaySplit is an optimized payment gateway on a mobile device that allows you to take a picture of a receipt, and generates a digital version using optical character recognition. The app displays all the items with their amounts. This allows you to select any item to request payment from your contacts, and pay the bill.
 
 ### Initial Setup
 1. Create a .env file
