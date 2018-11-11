@@ -49,7 +49,7 @@ app.use('/', indexRouter);
 app.use('/auth', authRouter);
 
 /** Protected Routes */
-app.use(verifyAuthentication);
+//app.use(verifyAuthentication);
 app.use('/receipt', receiptRouter);
 app.use('/invoice', invoiceRouter);
 
@@ -65,5 +65,5 @@ app.use((req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log('Check Please listening on port', PORT);
+  console.log('PaySplit listening on port', PORT);
 });
