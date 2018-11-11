@@ -15,7 +15,7 @@ const sendText = async (data, firstName) => {
   const message = await client.messages.create({
     body: txtMessage,
     to: data.recipient,
-    from: '+14159149382',
+    from: process.env.PRIVATEPHONE,
   });
   return message;
 };
