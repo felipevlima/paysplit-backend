@@ -13,7 +13,7 @@ router.get('/:id', async (req, res) => {
   const user = await User.findById(req.params.id);
   if (!user) {
     logger.error(user);
-    return respondWith(res, 500, ['User not found.']);
+    return respondWith(res, 404, ['User not found.']);
   }
   return respondWith(res, 200, ['User found'], {
     firstName: user.firstName,
