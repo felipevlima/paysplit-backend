@@ -18,8 +18,12 @@ router.post('/conversion', asyncHandler(async (req, res) => {
 }));
 
 /** Retrieve all items ever scanned */
-router.get('/api/records', asyncHandler(async (req, res) => {
+router.get('/all/records', asyncHandler(async (req, res) => {
   const allReceipts = await Receipt.findAll();
+  if (!allReceipts) {
+    logger.error(allReceipts);
+    return respondWith(res, 500, ['An error occured while attempting to get all receipts.']);
+  }
   return respondWith(res, 200, ['Returning all receipts.'], { allReceipts });
 }));
 
