@@ -1,3 +1,5 @@
+const { Receipt, Invoice } = require('../models');
+
 module.exports = (sequelize, DataTypes) => {
   const Item = sequelize.define('Items', {
     id: {
@@ -10,12 +12,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'Receipts',
+        model: Receipt,
         key: 'id',
       },
     },
     invoice_id: {
       type: DataTypes.UUID,
+      references: {
+        model: Invoice,
+        key: 'id',
+      },
     },
     product: {
       type: DataTypes.STRING,

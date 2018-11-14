@@ -11,14 +11,14 @@ module.exports = (sequelize, DataTypes) => {
     user_id: {
       type: DataTypes.UUID,
       allowNull: false,
-    },
-    merchant: {
-      type: DataTypes.STRING,
-      allowNull: false,
       references: {
         model: Users,
         key: 'id',
       },
+    },
+    merchant: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     location: {
       type: DataTypes.STRING,
