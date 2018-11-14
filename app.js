@@ -17,6 +17,7 @@ const indexRouter = require('./controllers/index.js');
 const authRouter = require('./controllers/auth.js');
 const receiptRouter = require('./controllers/receipt.js');
 const invoiceRouter = require('./controllers/invoice.js');
+const itemRouter = require('./controllers/item.js');
 
 /** Instantiate the server */
 const app = express();
@@ -44,6 +45,7 @@ sequelize.authenticate()
     console.error('Unable to connect to the database:', err.message);
   });
 
+
 /** Set up routes */
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
@@ -52,6 +54,7 @@ app.use('/auth', authRouter);
 //app.use(verifyAuthentication);
 app.use('/receipts', receiptRouter);
 app.use('/invoices', invoiceRouter);
+//app.use('/item', itemRouter);
 
 /** Any remaining request with an extension (.js, .css, etc...) send 404 */
 app.use((req, res, next) => {

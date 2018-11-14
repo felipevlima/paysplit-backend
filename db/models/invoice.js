@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Invoice.associate = (models) => {
     // associations can be defined here
-    Invoice.hasMany(models.Item, { foreignKey: 'item_id' });
+    Invoice.hasMany(models.Item, { foreignKey: 'id' });
   };
 
   return Invoice;
