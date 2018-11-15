@@ -28,7 +28,7 @@ router.post('/smsconvert', asyncHandler(async (req, res) => {
 /** Retrieve every Invoice stored */
 router.get('/all/records', asyncHandler(async (req, res) => {
   const allInvoices = await Invoice.findAll();
-  return respondWith(res, 200, ['Retruning all receipts.'], { allInvoices });
+  return respondWith(res, 200, ['Retruning all invoices.'], { allInvoices });
 }));
 
 /** GET Invoices details */
