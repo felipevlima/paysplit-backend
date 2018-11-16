@@ -28,6 +28,10 @@ router.post('/smsconvert', asyncHandler(async (req, res) => {
 /** Retrieve every Invoice stored */
 router.get('/all/records', asyncHandler(async (req, res) => {
   const allInvoices = await Invoice.findAll();
+  if (!allInvoices) {
+    logger.error(allInvoices);
+    respondWith(res, 404, ['Could not find requested invoices.']);
+  }
   return respondWith(res, 200, ['Retruning all invoices.'], { allInvoices });
 }));
 
@@ -43,6 +47,10 @@ router.get('/:id', asyncHandler(async (req, res) => {
 /** Delete Invoice  */
 router.delete('/:id', asyncHandler(async (req, res) => {
   const result = await Invoice.destroy({ where: { id: req.params.id } });
+  if (!result) {
+    logger.error(result);
+    respondWith(res, 404, ['Could not find requested invoice.']);
+  }
   return respondWith(res, 204, ['Invoice was successfuly deleted.'], { result });
 }));
 

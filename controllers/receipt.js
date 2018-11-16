@@ -40,6 +40,10 @@ router.get('/:id', asyncHandler(async (req, res) => {
 /** Delete Receipt */
 router.delete('/:id', asyncHandler(async (req, res) => {
   const result = await Receipt.destroy({ where: { id: req.params.id } });
+  if (!result) {
+    logger.error(result);
+    respondWith(res, 404, ['Something went wrong. Please try again']);
+  }
   return respondWith(res, 204, ['Receipt was successfully deleted.'], { result });
 }));
 
