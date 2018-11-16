@@ -54,7 +54,7 @@ app.use('/auth', authRouter);
 //app.use(verifyAuthentication);
 app.use('/receipts', receiptRouter);
 app.use('/invoices', invoiceRouter);
-//app.use('/item', itemRouter);
+app.use('/items', itemRouter);
 
 /** Any remaining request with an extension (.js, .css, etc...) send 404 */
 app.use((req, res, next) => {

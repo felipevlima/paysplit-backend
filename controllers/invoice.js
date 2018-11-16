@@ -33,24 +33,11 @@ router.get('/all/records', asyncHandler(async (req, res) => {
 
 /** GET Invoices details */
 router.get('/:id', asyncHandler(async (req, res) => {
-  const invoice = await Invoice.find({ where: { id: req.body.id } });
+  const invoice = await Invoice.find({ where: { id: req.params.id } });
   if (!invoice) {
     return respondWith(res, 404, ['Could not find requested invoice.']);
   }
   return respondWith(res, 200, ['Returning found invoice.'], { invoice });
-}));
-
-/** GET Items invoice details */
-router.get('/item/:invoice_id', asyncHandler(async (req, res) => {
-  const items = await Item.findAll({ where: { invoice_id: req.params.invoice_id } });
-
-  /** If no items found, likely internal server error */
-  if (!items) {
-    logger.error(items);
-    const errMsg = 'Somethign went wrong fetching all items. Try again!';
-    return respondWith(res, 500, [errMsg]);
-  }
-  return respondWith(res, 200, ['Returning all found items'], { items });
 }));
 
 /** Delete Invoice  */
