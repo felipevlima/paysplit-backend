@@ -1,5 +1,6 @@
 # paysplit-backend
 PaySplit is an optimized payment gateway on a mobile device that allows you to take a picture of a receipt, and generates a digital version using optical character recognition. The app displays all the items with their amounts. This allows you to select any item to request payment from your contacts, and pay the bill.
+***
 
 ### Initial Setup
 1. Create a .env file
@@ -23,5 +24,11 @@ ACCSID=ACe3a7af00a0de969e0a7b65f3e94de6c1
 TWILIOTOKEN=03849300e6186dffc9abfa0bd84a8e3a
 PRIVATEPHONE='+14159149382'
 ``` 
-3. You can find the PaySplit progress tracker [here](https://github.com/BriantOliveira/paysplit-backend/projects/1). 
-4. API documentation is available on our [Wiki](https://github.com/BriantOliveira/paysplit-backend/wiki). 
+***
+
+### Progress Tracker
+- You can find the PaySplit progress tracker [here](https://github.com/BriantOliveira/paysplit-backend/projects/1).
+***
+
+### API Documentation
+- API documentation is available on our [Wiki](https://github.com/BriantOliveira/paysplit-backend/wiki). 
