@@ -7,7 +7,7 @@ const { asyncHandler } = require('../utils/asyncRouteHandler');
 const router = Router();
 
 /** GET Items product details */
-router.get('/item/:receipt_id', asyncHandler(async (req, res) => {
+router.get('/:receipt_id', asyncHandler(async (req, res) => {
   const items = await Item.findAll({ where: { receipt_id: req.params.receipt_id } });
   /** If no items found, likely something went wrong internally */
   if (!items) {
@@ -20,7 +20,7 @@ router.get('/item/:receipt_id', asyncHandler(async (req, res) => {
 }));
 
 /** GET Items invoice details */
-router.get('/item/:invoice_id', asyncHandler(async (req, res) => {
+router.get('/:invoice_id', asyncHandler(async (req, res) => {
   const items = await Item.findAll({ where: { invoice_id: req.params.invoice_id } });
 
   /** If no items found, likely internal server error */

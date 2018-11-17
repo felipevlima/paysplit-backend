@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { Item, Receipt } = require('../db/models');
+const { Receipt } = require('../db/models');
 const { convertReceipt } = require('../utils/conversion.js');
 const { respondWith } = require('../utils/clientResponse');
 const logger = require('../utils/logger');
@@ -37,12 +37,25 @@ router.get('/:id', asyncHandler(async (req, res) => {
   return respondWith(res, 200, ['Returning found receipt'], { receipt });
 }));
 
+/** Get all receipts by user id */
+router.get('/all/:user_id', asyncHandler(async (req, res) => {
+  const getAllReceipts = await Receipt.findAll({
+    where: { user_id: req.params.user_id },
+    returning: true,
+  });
+  if (!getAllReceipts) {
+    logger.error(getAllReceipts);
+    return respondWith(res, 404, ['Could not find any receipt']);
+  }
+  return respondWith(res, 200, ['All user receipts found'], { getAllReceipts });
+}));
+
 /** Delete Receipt */
 router.delete('/:id', asyncHandler(async (req, res) => {
   const result = await Receipt.destroy({ where: { id: req.params.id } });
   if (!result) {
     logger.error(result);
-    respondWith(res, 404, ['Something went wrong. Please try again']);
+    respondWith(res, 404, ['Could not find requested receipt.']);
   }
   return respondWith(res, 204, ['Receipt was successfully deleted.'], { result });
 }));

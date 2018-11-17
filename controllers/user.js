@@ -4,9 +4,7 @@ const { User } = require('../db/models');
 const logger = require('../utils/logger');
 const { respondWith } = require('../utils/clientResponse');
 
-
 const router = Router();
-
 
 /** Find User by Id */
 router.get('/:id', async (req, res) => {
