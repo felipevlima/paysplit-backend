@@ -32,4 +32,29 @@ router.get('/:invoice_id', asyncHandler(async (req, res) => {
   return respondWith(res, 200, ['Returning all found items'], { items });
 }));
 
+router.patch('/:id', asyncHandler(async (req, res) => {
+  const item = await Item.findById(req.params.id);
+
+  /** Early exist if Item id is not found */
+  if (!item) {
+    logger.error(item);
+    return respondWith(res, 500, ['An error occurred while updating Item']);
+  }
+  const updateItem = await Item.update({
+    receipt_id: req.body.receipt_id || item.receipt_id,
+    invoice_id: req.body.invoice_id || item.invoice_id,
+    product: req.body.product || item.product,
+    price: item.price,
+  }, { where: { id: req.body.params } },
+  { returning: true });
+
+  /** Early exist if there isn't anything to update */
+  if (!updateItem) {
+    logger.error(updateItem);
+    return respondWith(res, 500, ['An error occurred while updating Item']);
+  }
+
+  return respondWith(res, 200, ['Item updated successfully'], { updateItem });
+}));
+
 module.exports = router;
