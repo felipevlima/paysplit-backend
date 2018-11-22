@@ -32,7 +32,23 @@ router.get('/:invoice_id', asyncHandler(async (req, res) => {
   return respondWith(res, 200, ['Returning all found items'], { items });
 }));
 
+/** Create Item */
+router.post('/create', asyncHandler(async (req, res) => {
+  const newItem = await Item.create({
+    receipt_id: req.body.receipt_id,
+    product: req.body.product,
+    price: req.body.price,
+  }, { returning: true });
+  if (!newItem) {
+    logger.error(newItem);
+    return respondWith(res, 500, ['An error occurred while creating Item']);
+  }
+  return respondWith(res, 200, ['Item created successfully'], { newItem });
+}));
+
+/** Update Item */
 router.patch('/:id', asyncHandler(async (req, res) => {
+  /** Find Item by Id */
   const item = await Item.findById(req.params.id);
 
   /** Early exist if Item id is not found */
@@ -40,6 +56,7 @@ router.patch('/:id', asyncHandler(async (req, res) => {
     logger.error(item);
     return respondWith(res, 500, ['An error occurred while updating Item']);
   }
+  /** If Item found, update Item */
   const updateItem = await Item.update({
     receipt_id: req.body.receipt_id || item.receipt_id,
     invoice_id: req.body.invoice_id || item.invoice_id,
