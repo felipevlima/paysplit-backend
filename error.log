@@ -1,0 +1,19 @@
+{ [Error: The 'From' number +'14159149382 is not a valid phone number, shortcode, or alphanumeric sender ID.]
+  status: 400,
+  message:
+   'The \'From\' number +\'14159149382 is not a valid phone number, shortcode, or alphanumeric sender ID.',
+  code: 21212,
+  moreInfo: 'https://www.twilio.com/docs/errors/21212',
+  detail: undefined,
+  level: 'error',
+  timestamp: '2018-11-15T17:30:48.895Z',
+  [Symbol(level)]: 'error' }
+{ message: undefined,
+  level: 'error',
+  timestamp: '2018-11-15T17:30:48.896Z',
+  [Symbol(level)]: 'error' }
+{ message:
+   'Password hashing error: Error: data and salt arguments required',
+  level: 'error',
+  timestamp: '2018-11-17T01:35:04.317Z',
+  [Symbol(level)]: 'error' }

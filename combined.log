@@ -1,0 +1,51 @@
+{ message: 'Coverting receipt from image.',
+  level: 'info',
+  timestamp: '2018-11-13T16:49:44.559Z',
+  [Symbol(level)]: 'info' }
+{ message: 'Processing raw data into usable data...',
+  level: 'info',
+  timestamp: '2018-11-13T16:49:47.928Z',
+  [Symbol(level)]: 'info' }
+{ message:
+   { receipt_id: '217bafa0-e764-11e8-a7d6-292665ab97ba',
+     amount: '32,00',
+     recipient: '9786778022',
+     msg: 'For the burger' },
+  level: 'info',
+  timestamp: '2018-11-15T17:30:48.179Z',
+  [Symbol(level)]: 'info' }
+{ [Error: The 'From' number +'14159149382 is not a valid phone number, shortcode, or alphanumeric sender ID.]
+  status: 400,
+  message:
+   'The \'From\' number +\'14159149382 is not a valid phone number, shortcode, or alphanumeric sender ID.',
+  code: 21212,
+  moreInfo: 'https://www.twilio.com/docs/errors/21212',
+  detail: undefined,
+  level: 'error',
+  timestamp: '2018-11-15T17:30:48.895Z',
+  [Symbol(level)]: 'error' }
+{ message: undefined,
+  level: 'error',
+  timestamp: '2018-11-15T17:30:48.896Z',
+  [Symbol(level)]: 'error' }
+{ message:
+   { receipt_id: '217bafa0-e764-11e8-a7d6-292665ab97ba',
+     amount: '32,00',
+     recipient: '9786778022',
+     msg: 'For the burger' },
+  level: 'info',
+  timestamp: '2018-11-15T18:15:40.020Z',
+  [Symbol(level)]: 'info' }
+{ message:
+   'Password hashing error: Error: data and salt arguments required',
+  level: 'error',
+  timestamp: '2018-11-17T01:35:04.317Z',
+  [Symbol(level)]: 'error' }
+{ message:
+   { receipt_id: '217bafa0-e764-11e8-a7d6-292665ab97ba',
+     amount: '13',
+     recipient: '9259632019',
+     msg: 'Social Study' },
+  level: 'info',
+  timestamp: '2018-11-19T01:29:18.829Z',
+  [Symbol(level)]: 'info' }
