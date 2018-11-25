@@ -17,6 +17,7 @@ const indexRouter = require('./controllers/index.js');
 const authRouter = require('./controllers/auth.js');
 const receiptRouter = require('./controllers/receipt.js');
 const invoiceRouter = require('./controllers/invoice.js');
+const itemRouter = require('./controllers/item.js');
 
 /** Instantiate the server */
 const app = express();
@@ -34,7 +35,7 @@ app.use(sanitizer.middleware);
 app.use(expressSanitizer());
 
 /**  SQL Connection */
-const sequelize = new Sequelize(`postgres://${process.env.DBUSER}:${process.env.DBPASSWORD}@localhost:${process.env.DBPORT}/checkplease`);
+const sequelize = new Sequelize(`postgres://${process.env.DBUSER}:${process.env.DBPASSWORD}@localhost:${process.env.DBPORT}/paysplit`);
 
 sequelize.authenticate()
   .then(() => {
@@ -44,14 +45,16 @@ sequelize.authenticate()
     console.error('Unable to connect to the database:', err.message);
   });
 
+
 /** Set up routes */
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 
 /** Protected Routes */
-app.use(verifyAuthentication);
-app.use('/receipt', receiptRouter);
-app.use('/invoice', invoiceRouter);
+//app.use(verifyAuthentication);
+app.use('/receipts', receiptRouter);
+app.use('/invoices', invoiceRouter);
+app.use('/items', itemRouter);
 
 /** Any remaining request with an extension (.js, .css, etc...) send 404 */
 app.use((req, res, next) => {
@@ -65,5 +68,5 @@ app.use((req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log('Check Please listening on port', PORT);
+  console.log('PaySplit listening on port', PORT);
 });

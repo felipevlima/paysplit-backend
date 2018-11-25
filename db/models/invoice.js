@@ -1,3 +1,5 @@
+const { Receipt } = require('./receipt');
+
 module.exports = (sequelize, DataTypes) => {
   const Invoice = sequelize.define('Invoices', {
     id: {
@@ -11,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
+      references: {
+        model: Receipt,
+        key: 'id',
+      },
     },
     recipient: {
       type: DataTypes.STRING,
@@ -32,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Invoice.associate = (models) => {
     // associations can be defined here
-    Invoice.belongsTo(models.Item);
+    Invoice.hasMany(models.Item, { foreignKey: 'id' });
   };
 
   return Invoice;

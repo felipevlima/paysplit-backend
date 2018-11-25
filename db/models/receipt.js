@@ -1,3 +1,5 @@
+const { Users } = require('./user');
+
 module.exports = (sequelize, DataTypes) => {
   const Receipt = sequelize.define('Receipt', {
     id: {
@@ -9,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
     user_id: {
       type: DataTypes.UUID,
       allowNull: false,
+      references: {
+        model: Users,
+        key: 'id',
+      },
     },
     merchant: {
       type: DataTypes.STRING,
@@ -33,13 +39,11 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true,
   });
 
-  Receipt.associate = function(models) {
+  Receipt.associate = (models) => {
     // associations can be defined here
-    Receipt.belongsTo(models.User, {
-    foreignKey: 'user_id'
-   })
-    Receipt.hasMany(models.Item)
+    Receipt.belongsTo(models.User, { foreignKey: 'user_id' });
+    Receipt.hasMany(models.Item, { foreignKey: 'receipt_id' });
   };
-  
+
   return Receipt;
 };

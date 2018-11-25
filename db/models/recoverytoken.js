@@ -1,23 +1,27 @@
 module.exports = (sequelize, DataTypes) => {
-  const recoveryToken = sequelize.define('recoveryToken', {
+  const RecoveryToken = sequelize.define('recoveryToken', {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
-      allowNull: false
+      allowNull: false,
     },
     user_id: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
-      allowNull: false
+      allowNull: false,
     },
     token: DataTypes.STRING,
-    rejectedAt: DataTypes.DATE
-  }, {});
-  recoveryToken.associate = function(models) {
+    rejectedAt: DataTypes.DATE,
+  }, {
+    timestamps: true,
+  });
+
+  RecoveryToken.associate = (models) => {
     // associations can be defined here
-    recoveryToken.belongsTo(models.User)
+    RecoveryToken.belongsTo(models.User);
   };
-  return recoveryToken;
+
+  return RecoveryToken;
 };
