@@ -10,6 +10,7 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const sanitizer = require('sanitize');
 const expressSanitizer = require('express-sanitizer');
+const { Client } = require('pg');
 
 /** Import Routes */
 const { verifyAuthentication } = require('./utils/middleware');
@@ -35,6 +36,24 @@ app.use(sanitizer.middleware);
 app.use(expressSanitizer());
 
 /**  SQL Connection */
+
+/** Server DB */
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: true,
+});
+
+client.connect();
+
+client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
+  if (err) throw err;
+  for (let row of res.rows) {
+    console.log(JSON.stringify(row));
+  }
+  client.end();
+});
+
+/** Local DB */
 const sequelize = new Sequelize(`postgres://${process.env.DBUSER}:${process.env.DBPASSWORD}@localhost:${process.env.DBPORT}/${process.env.DBNAME}`);
 
 sequelize.authenticate()
