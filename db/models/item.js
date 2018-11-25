@@ -1,3 +1,5 @@
+const { Receipt, Invoice } = require('../models');
+
 module.exports = (sequelize, DataTypes) => {
   const Item = sequelize.define('Items', {
     id: {
@@ -9,9 +11,17 @@ module.exports = (sequelize, DataTypes) => {
     receipt_id: {
       type: DataTypes.UUID,
       allowNull: false,
+      references: {
+        model: Receipt,
+        key: 'id',
+      },
     },
     invoice_id: {
       type: DataTypes.UUID,
+      references: {
+        model: Invoice,
+        key: 'id',
+      },
     },
     product: {
       type: DataTypes.STRING,
@@ -34,8 +44,8 @@ module.exports = (sequelize, DataTypes) => {
 
   Item.associate = (models) => {
     // associations can be defined here
-    Item.belongsTo(models.Receipt);
-    Item.belongsTo(models.Invoice);
+    Item.belongsTo(models.Receipt, { foreignKey: 'receipt_id' });
+    Item.belongsTo(models.Invoice, { foreignKey: 'invoice_id' });
   };
 
   return Item;

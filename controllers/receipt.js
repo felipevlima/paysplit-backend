@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { Item, Receipt } = require('../db/models');
+const { Receipt } = require('../db/models');
 const { convertReceipt } = require('../utils/conversion.js');
 const { respondWith } = require('../utils/clientResponse');
 const logger = require('../utils/logger');
@@ -18,8 +18,12 @@ router.post('/conversion', asyncHandler(async (req, res) => {
 }));
 
 /** Retrieve all items ever scanned */
-router.get('/api/records', asyncHandler(async (req, res) => {
+router.get('/all/records', asyncHandler(async (req, res) => {
   const allReceipts = await Receipt.findAll();
+  if (!allReceipts) {
+    logger.error(allReceipts);
+    return respondWith(res, 500, ['An error occurred while attempting to get all receipts.']);
+  }
   return respondWith(res, 200, ['Returning all receipts.'], { allReceipts });
 }));
 
@@ -33,21 +37,26 @@ router.get('/:id', asyncHandler(async (req, res) => {
   return respondWith(res, 200, ['Returning found receipt'], { receipt });
 }));
 
-/** GET Items product details  TODO: Move to Items controller */
-router.get('/item/:receipt_id', asyncHandler(async (req, res) => {
-  const items = await Item.findAll({ where: { receipt_id: req.params.receipt_id } });
-  /** If no items found, likely something went wrong internally */
-  if (!items) {
-    const msg = 'Something went wrong fetching all items. Please try your search again.';
-    return respondWith(res, 500, [msg]);
+/** Get all receipts by user id */
+router.get('/all/:user_id', asyncHandler(async (req, res) => {
+  const getAllReceipts = await Receipt.findAll({
+    where: { user_id: req.params.user_id },
+    returning: true,
+  });
+  if (!getAllReceipts) {
+    logger.error(getAllReceipts);
+    return respondWith(res, 404, ['Could not find any receipt']);
   }
-
-  return respondWith(res, 200, ['Returning all found items'], { items });
+  return respondWith(res, 200, ['All user receipts found'], { getAllReceipts });
 }));
 
 /** Delete Receipt */
 router.delete('/:id', asyncHandler(async (req, res) => {
   const result = await Receipt.destroy({ where: { id: req.params.id } });
+  if (!result) {
+    logger.error(result);
+    respondWith(res, 404, ['Could not find requested receipt.']);
+  }
   return respondWith(res, 204, ['Receipt was successfully deleted.'], { result });
 }));
 

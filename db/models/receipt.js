@@ -1,3 +1,5 @@
+const { Users } = require('./user');
+
 module.exports = (sequelize, DataTypes) => {
   const Receipt = sequelize.define('Receipt', {
     id: {
@@ -9,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
     user_id: {
       type: DataTypes.UUID,
       allowNull: false,
+      references: {
+        model: Users,
+        key: 'id',
+      },
     },
     merchant: {
       type: DataTypes.STRING,
