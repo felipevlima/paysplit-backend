@@ -28,7 +28,6 @@
     "express-sanitizer": "^1.0.4",
     "express-session": "^1.15.6",
     "jsonwebtoken": "^8.3.0",
-    "nodemon": "^1.18.4",
     "path": "^0.12.7",
     "pg": "^7.6.1",
     "pg-hstore": "^2.3.2",
@@ -42,9 +41,12 @@
     "winston": "^3.1.0"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
     "eslint": "^4.19.0",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.14.0"
+    "eslint-plugin-import": "^2.14.0",
+    "mocha": "^5.2.0"
   },
   "keywords": [],
   "description": ""
