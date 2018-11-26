@@ -70,7 +70,7 @@ app.use('/', indexRouter);
 app.use('/auth', authRouter);
 
 /** Protected Routes */
-//app.use(verifyAuthentication);
+app.use(verifyAuthentication);
 app.use('/receipts', receiptRouter);
 app.use('/invoices', invoiceRouter);
 app.use('/items', itemRouter);
