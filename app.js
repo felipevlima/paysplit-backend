@@ -38,23 +38,24 @@ app.use(expressSanitizer());
 /**  SQL Connection */
 
 /** Server DB */
-const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: true,
-});
+// const client = new Client({
+//   connectionString: process.env.DATABASE_URL,
+//   ssl: true,
+// });
 
-client.connect();
+// client.connect();
 
-client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
-  if (err) throw err;
-  for (let row of res.rows) {
-    console.log(JSON.stringify(row));
-  }
-  client.end();
-});
+// client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
+//   if (err) throw err;
+//   for (let row of res.rows) {
+//     console.log(JSON.stringify(row));
+//   }
+//   client.end();
+// });
 
 /** Local DB */
-const sequelize = new Sequelize(`postgres://${process.env.DBUSER}:${process.env.DBPASSWORD}@localhost:${process.env.DBPORT}/${process.env.DBNAME}`);
+const envDB = process.env.DATABASE_URL;
+const sequelize = new Sequelize(envDB || `postgres://${process.env.DBUSER}:${process.env.DBPASSWORD}@localhost:${process.env.DBPORT}/${process.env.DBNAME}`);
 
 sequelize.authenticate()
   .then(() => {
@@ -70,7 +71,7 @@ app.use('/', indexRouter);
 app.use('/auth', authRouter);
 
 /** Protected Routes */
-app.use(verifyAuthentication);
+//app.use(verifyAuthentication);
 app.use('/receipts', receiptRouter);
 app.use('/invoices', invoiceRouter);
 app.use('/items', itemRouter);
