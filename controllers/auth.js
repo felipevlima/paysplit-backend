@@ -66,8 +66,6 @@ router.post('/signup', asyncHandler(async (req, res) => {
  * Login Routes
  */
 router.post('/login', asyncHandler(async (req, res) => {
-  logger.log('email', req.body.email);
-
   /** Get the user to compare password */
   const user = await User.findOne({ where: { email: req.body.email } });
 
