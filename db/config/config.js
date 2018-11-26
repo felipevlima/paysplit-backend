@@ -16,10 +16,7 @@ module.exports = {
     dialect: 'postgres',
   },
   production: {
-    username: process.env.PDBUSER,
-    password: process.env.PDBPASSWORD,
-    database: process.env.PDBNAME,
-    host: process.env.PDBHOST,
+    use_env_variable: process.env.HEROKU_POSTGRESQL_BLACK_URL,
     dialect: 'postgres',
   },
 };

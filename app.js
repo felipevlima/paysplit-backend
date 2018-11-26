@@ -36,7 +36,9 @@ app.use(sanitizer.middleware);
 app.use(expressSanitizer());
 
 /**  SQL Connection */
-const sequelize = new Sequelize(`postgres://${process.env.DBUSER}:${process.env.DBPASSWORD}@localhost:${process.env.DBPORT}/${process.env.DBNAME}`);
+const sequelize = process.env.NODE_ENV !== 'production' ? 
+  new Sequelize(`postgres://${process.env.DBUSER}:${process.env.DBPASSWORD}@localhost:${process.env.DBPORT}/${process.env.DBNAME}`) :
+  new Sequelize(process.env.HEROKU_POSTGRES_DB_BLACK);
 
 sequelize.authenticate()
   .then(() => {
