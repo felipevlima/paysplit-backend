@@ -15,11 +15,14 @@ const getUser = async (data) => {
     logger.error(user);
     return undefined;
   }
-  return user.firstName;
+  return {
+    firstName: user.firstName,
+    phoneNumber: user.phoneNumber,
+  };
 };
 
 /** Calling database endoipoit to store data */
-const storeInvoiceInfo = async (data, firstName) => {
+const storeInvoiceInfo = async (data, userInfo) => {
   try {
     /** creates the invoice in the database */
     const invoice = await Invoice.create({
@@ -41,7 +44,7 @@ const storeInvoiceInfo = async (data, firstName) => {
     /**
      * Send the data to the twilio api to send invoice request to recipient
      */
-    const sendToTwillio = await sendText(data, firstName);
+    const sendToTwillio = await sendText(data, userInfo);
     console.log(sendToTwillio);
 
     return {
@@ -58,11 +61,11 @@ const storeInvoiceInfo = async (data, firstName) => {
 const transportInvoice = async (data) => {
   logger.info(data);
 
-  /** Search for the user first name and returns to storeInvoiceInfo */
-  const getUsername = await getUser(data);
+  /** Search for the user first name and phone number and returns to storeInvoiceInfo */
+  const getUserInfo = await getUser(data);
 
   /** Store data in the database. */
-  const invoiceIds = await storeInvoiceInfo(data, getUsername);
+  const invoiceIds = await storeInvoiceInfo(data, getUserInfo);
   logger.debug(invoiceIds);
 
   console.log('batch of invoice storage complete');
