@@ -18,7 +18,7 @@ const db = {
   Receipt: sequelize.import('./receipt.js'),
   Item: sequelize.import('./item.js'),
   Invoice: sequelize.import('./invoice.js'),
-  recoveryToken: sequelize.import('./recoveryToken.js')
+  recoveryToken: sequelize.import('./recoverytoken.js'),
 };
 
 Object.keys(db).forEach(key => {
