@@ -34,7 +34,9 @@ HEROKU_POSTGRES_DB_BLACK=postgres://pgxctmmvlgbpoc:30504d04d5b64eeb31e6ba7b0b3e5
 ***
 
 ### Progress Tracker
-- You can find the PaySplit progress tracker [here](https://github.com/BriantOliveira/paysplit-backend/projects/1).
+- You can find the PaySplit progress tracker here.
+  - [MVP](https://github.com/BriantOliveira/paysplit-backend/projects/1).
+  - [Version 1.2](https://github.com/BriantOliveira/paysplit-backend/projects/2)
 ***
 
 ### API Documentation
