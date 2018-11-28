@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { Receipt } = require('../db/models');
+const { Receipt, Item } = require('../db/models');
 const { convertReceipt } = require('../utils/conversion.js');
 const { respondWith } = require('../utils/clientResponse');
 const logger = require('../utils/logger');
@@ -35,6 +35,21 @@ router.get('/:id', asyncHandler(async (req, res) => {
   }
 
   return respondWith(res, 200, ['Returning found receipt'], { receipt });
+}));
+
+/** Get Receipts and Items  */
+router.get('/items/:id', asyncHandler(async (req, res) => {
+  const getReceipt = await Receipt.find({ where: { id: req.params.id } });
+  if (!getReceipt) {
+    logger.error(getReceipt);
+    return respondWith(res, 404, ['Could not find requested receipt.']);
+  }
+  const getItem = await Item.findAll({ where: { receipt_id: req.params.id } });
+  if (!getItem) {
+    logger.error(getItem);
+    return respondWith(res, 404, ['Could not find requested Item']);
+  }
+  return respondWith(res, 200, ['Returning Receitp and Items founds'], { getReceipt, getItem });
 }));
 
 /** Get all receipts by user id */
