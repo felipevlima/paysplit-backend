@@ -60,6 +60,8 @@ app.use('/receipts', receiptRouter);
 app.use('/invoices', invoiceRouter);
 app.use('/items', itemRouter);
 
+console.log(process.env.HEROKU_POSTGRESQL_BLUE_URL, process.env.DBUSER, process.env.DBNAME)
+
 
 /** S3 Bucket */
 app.use('/s3', s3Router);

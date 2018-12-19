@@ -23,5 +23,4 @@ module.exports = {
     host: process.env.DBHOST,
     dialect: 'postgres',
   },
-  console.log(process.env.HEROKU_POSTGRESQL_BLUE_URL, process.env.DBUSER, process.env.DBNAME)
 };
