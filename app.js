@@ -12,6 +12,7 @@ const sanitizer = require('sanitize');
 const expressSanitizer = require('express-sanitizer');
 const { Client } = require('pg');
 
+
 /** Import Routes */
 const { verifyAuthentication } = require('./utils/middleware');
 const indexRouter = require('./controllers/index.js');
@@ -19,6 +20,7 @@ const authRouter = require('./controllers/auth.js');
 const receiptRouter = require('./controllers/receipt.js');
 const invoiceRouter = require('./controllers/invoice.js');
 const itemRouter = require('./controllers/item.js');
+const s3Router = require('./controllers/s3Bucket.js');
 
 /** Instantiate the server */
 const app = express();
@@ -58,6 +60,9 @@ app.use('/receipts', receiptRouter);
 app.use('/invoices', invoiceRouter);
 app.use('/items', itemRouter);
 
+
+/** S3 Bucket */
+app.use('/s3', s3Router);
 
 /** Any remaining request with an extension (.js, .css, etc...) send 404 */
 app.use((req, res, next) => {
