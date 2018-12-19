@@ -10,7 +10,6 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const sanitizer = require('sanitize');
 const expressSanitizer = require('express-sanitizer');
-const { Client } = require('pg');
 
 
 /** Import Routes */
@@ -38,7 +37,7 @@ app.use(sanitizer.middleware);
 app.use(expressSanitizer());
 
 /**  SQL Connection */
-const sequelize = new Sequelize(`postgres://${process.env.DBUSER}:${process.env.DBPASSWORD}@${process.env.DBHOST}:${process.env.DBPORT}/${process.env.DBNAME}`);
+const sequelize = new Sequelize(`postgres://${process.env.DBUSER}:${process.env.DBPASSWORD}@${process.env.DBHOST}:${process.env.DBPORT}/${process.env.DBNAME}` || process.env.HEROKU_POSTGRESQL_BLUE_URL);
 
 sequelize.authenticate()
   .then(() => {
@@ -59,9 +58,6 @@ app.use(verifyAuthentication);
 app.use('/receipts', receiptRouter);
 app.use('/invoices', invoiceRouter);
 app.use('/items', itemRouter);
-
-console.log(process.env.HEROKU_POSTGRESQL_BLUE_URL, process.env.DBUSER, process.env.DBNAME)
-
 
 /** S3 Bucket */
 app.use('/s3', s3Router);
