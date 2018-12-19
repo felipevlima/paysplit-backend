@@ -11,6 +11,8 @@ const Sequelize = require('sequelize');
 const sanitizer = require('sanitize');
 const expressSanitizer = require('express-sanitizer');
 const { Client } = require('pg');
+const getURL = require('./utils/getS3URL');
+// const AWS = require('aws-sdk');
 
 /** Import Routes */
 const { verifyAuthentication } = require('./utils/middleware');
@@ -55,6 +57,12 @@ app.use(verifyAuthentication);
 app.use('/receipts', receiptRouter);
 app.use('/invoices', invoiceRouter);
 app.use('/items', itemRouter);
+
+/** S3 Bucket */
+app.get('/geturl', (req, res) => {
+  getURL.generatePresignedURL(req, res);
+});
+// const s3 = new AWS.S3({accessKeyId : config.aws_access_key_id, secretAccessKey : config.aws_secret_access_key, useAccelerateEndpoint: true});
 
 /** Any remaining request with an extension (.js, .css, etc...) send 404 */
 app.use((req, res, next) => {
