@@ -21,7 +21,7 @@ const db = {
   recoveryToken: sequelize.import('./recoverytoken.js'),
 };
 
-Object.keys(db).forEach(key => {
+Object.keys(db).forEach((key) => {
   if ('associate' in db[key]) {
     db[key].associate(db);
   }
