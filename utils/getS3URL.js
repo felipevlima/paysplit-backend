@@ -17,10 +17,10 @@ const s3 = new AWS.S3();
 
 const params = {
   Bucket: process.env.S3_BUCKET,
-  Expires: 10000000, // time to expire in seconds
+  Expires: 100, // time to expire in seconds
 
   Fields: {
-    key: 'test',
+    key: 'image.jpg',
   },
   conditions: [
     { acl: 'private' },
@@ -30,8 +30,9 @@ const params = {
     { 'x-amz-algorithm': 'AWS4-HMAC-SHA256' },
   ],
 };
+
 const generatePresignedURL = async (req, res) => {
-  params.Fields.key = req.query.filename || 'filename';
+  params.Fields.key = req.query.filename || 'filename.png';
   s3.createPresignedPost(params, (err, data) => {
     if (err) {
       logger.error(err);

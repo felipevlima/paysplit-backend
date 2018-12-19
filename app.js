@@ -21,6 +21,7 @@ const authRouter = require('./controllers/auth.js');
 const receiptRouter = require('./controllers/receipt.js');
 const invoiceRouter = require('./controllers/invoice.js');
 const itemRouter = require('./controllers/item.js');
+const s3Router = require('./controllers/s3Bucket.js');
 
 /** Instantiate the server */
 const app = express();
@@ -59,11 +60,7 @@ app.use('/invoices', invoiceRouter);
 app.use('/items', itemRouter);
 
 /** S3 Bucket */
-app.get('/geturl', (req, res) => {
-  getURL.generatePresignedURL(req, res);
-});
-// const s3 = new AWS.S3({accessKeyId : config.aws_access_key_id, secretAccessKey : config.aws_secret_access_key, useAccelerateEndpoint: true});
-
+app.use('/s3', s3Router);
 /** Any remaining request with an extension (.js, .css, etc...) send 404 */
 app.use((req, res, next) => {
   if (path.extname(req.path).length) {
