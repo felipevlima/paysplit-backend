@@ -9,7 +9,7 @@
     "migrate_db": "sequelize db:migrate"
   },
   "engines": {
-    "node": "10.14.1"
+    "node": "10.3.0"
   },
   "repository": {
     "type": "git",
