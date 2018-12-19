@@ -11,8 +11,7 @@ const Sequelize = require('sequelize');
 const sanitizer = require('sanitize');
 const expressSanitizer = require('express-sanitizer');
 const { Client } = require('pg');
-const getURL = require('./utils/getS3URL');
-// const AWS = require('aws-sdk');
+
 
 /** Import Routes */
 const { verifyAuthentication } = require('./utils/middleware');
