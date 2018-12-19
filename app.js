@@ -44,6 +44,7 @@ sequelize.authenticate()
   .then(() => {
     console.log('Connection has been established successfully.');
   })
+  /** Early exit */
   .catch((err) => {
     console.error('Unable to connect to the database:', err.message);
   });
@@ -59,8 +60,10 @@ app.use('/receipts', receiptRouter);
 app.use('/invoices', invoiceRouter);
 app.use('/items', itemRouter);
 
+
 /** S3 Bucket */
 app.use('/s3', s3Router);
+
 /** Any remaining request with an extension (.js, .css, etc...) send 404 */
 app.use((req, res, next) => {
   if (path.extname(req.path).length) {
