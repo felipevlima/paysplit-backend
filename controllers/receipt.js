@@ -1,74 +1,78 @@
-//const { Receipt } = require('../db/models');
-const asyncHandler = require('express-async-handler');
-const models = require('../db/models');
-//const Items = require('../db/models/item.js')
-const {runapp} = require('../receipts.js');
-const {convertReceiptFromURL} = require('./taggun.js')
-const request = require('request');
+const { Router } = require('express');
+const { Receipt, Item } = require('../db/models');
+const { convertReceipt } = require('../utils/conversion.js');
+const { respondWith } = require('../utils/clientResponse');
+const logger = require('../utils/logger');
+const { asyncHandler } = require('../utils/asyncRouteHandler');
 
+const router = Router();
+/** Mobile endpoint to retrieve data */
+router.post('/conversion', asyncHandler(async (req, res) => {
+  const data = await convertReceipt(req.body.url, req.body.user_id);
 
-module.exports = function(app) {
+  if (data === undefined) {
+    return respondWith(res, 500, ['An error occurred while converting the receipt.']);
+  }
 
-  app.post('/api/img', (req, res) => {
-    let receiptURLs = {
-      url: req.body.url,
-      userToken: req.body.userToken,
-      user_id: req.body.user_id
-    };
-    //TODO: Create socket(chanel) for -> iOs client.
-    // if (receiptURLs.length === 0) {
-    //   return res.send('no entries returned').status(500)
-    // }
-    const user_ID = req.body.user_id
-    // console.log(userId)
-    console.log(receiptURLs)
-    runapp(receiptURLs, user_ID)
-    res.status(200).json({message:"Image received successfully"})
+  return respondWith(res, 200, ['Image received successfully.'], data);
+}));
+
+/** Retrieve all items ever scanned */
+router.get('/all/records', asyncHandler(async (req, res) => {
+  const allReceipts = await Receipt.findAll();
+  if (!allReceipts) {
+    logger.error(allReceipts);
+    return respondWith(res, 500, ['An error occurred while attempting to get all receipts.']);
+  }
+  return respondWith(res, 200, ['Returning all receipts.'], { allReceipts });
+}));
+
+/** GET Receipt Marchant details */
+router.get('/:id', asyncHandler(async (req, res) => {
+  const receipt = await Receipt.find({ where: { id: req.params.id } });
+  if (!receipt) {
+    return respondWith(res, 404, ['Could not find requested receipt.']);
+  }
+
+  return respondWith(res, 200, ['Returning found receipt'], { receipt });
+}));
+
+/** Get Receipts and Items  */
+router.get('/items/:id', asyncHandler(async (req, res) => {
+  const getReceipt = await Receipt.find({ where: { id: req.params.id } });
+  if (!getReceipt) {
+    logger.error(getReceipt);
+    return respondWith(res, 404, ['Could not find requested receipt.']);
+  }
+  const getItem = await Item.findAll({ where: { receipt_id: req.params.id } });
+  if (!getItem) {
+    logger.error(getItem);
+    return respondWith(res, 404, ['Could not find requested Item']);
+  }
+  return respondWith(res, 200, ['Returning Receitp and Items founds'], { getReceipt, getItem });
+}));
+
+/** Get all receipts by user id */
+router.get('/all/:user_id', asyncHandler(async (req, res) => {
+  const getAllReceipts = await Receipt.findAll({
+    where: { user_id: req.params.user_id },
+    returning: true,
   });
+  if (!getAllReceipts) {
+    logger.error(getAllReceipts);
+    return respondWith(res, 404, ['Could not find any receipt']);
+  }
+  return respondWith(res, 200, ['All user receipts found'], { getAllReceipts });
+}));
 
-  //retrieve all items ever scanned
-  app.get('/test', asyncHandler(async (req, res, next) => {
-    const everyItemEverPurchased = await models.Receipt.findAll()
-    res.json(everyItemEverPurchased)
-  }))
+/** Delete Receipt */
+router.delete('/:id', asyncHandler(async (req, res) => {
+  const result = await Receipt.destroy({ where: { id: req.params.id } });
+  if (!result) {
+    logger.error(result);
+    respondWith(res, 404, ['Could not find requested receipt.']);
+  }
+  return respondWith(res, 204, ['Receipt was successfully deleted.'], { result });
+}));
 
-  //create bulk entry for receipt
-  app.post('/', asyncHandler(async (req, res, next) => {
-  // console.log(req.body)
-  const receipt = await models.Receipt.bulkCreate(req.body, {returning: true})
-    if (receipt.length === 0) {
-      return res.send('no entries returned').status(500)
-    }
-    res.status(201).json(req.body)
-  }))
-
-  app.put('/receipt/:id/edit', (req, res) => {
-    models.Receipt.update(receiptId).then((receipt) => {
-      res.status(200)
-      res.json({receipt})
-      console.log("Update successfully" + receipt);
-    }).catch((err) => {
-      if(err) {
-        res.status(400);
-        res.json({msg: 'ERROR could not update.'})
-      }
-    })
-  })
-
-  app.get('/receipt/:id', (req, res) => {
-    const recId = req.params.id
-    models.Receipt.findById(recId).then(() => {
-      res.json({msg: 'receipt show', recId})
-    })
-  })
-
-  app.delete('/:id', asyncHandler(async (req, res, next) => {
-    await Receipt.destroy({
-      where: {
-        id: req.params.id
-      }
-    })
-    res.status(204)
-  }))
-
-}
+module.exports = router;

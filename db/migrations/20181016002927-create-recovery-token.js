@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Receipts', {
+    return queryInterface.createTable('recoveryTokens', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -14,34 +14,10 @@ module.exports = {
       user_id: {
         type: Sequelize.UUID
       },
-      merchant: {
+      token: {
         type: Sequelize.STRING
       },
-      product: {
-        type: Sequelize.STRING
-      },
-      price: {
-        type: Sequelize.DECIMAL
-      },
-      date: {
-        type: Sequelize.DATE
-      },
-      location: {
-        type: Sequelize.STRING
-      },
-      url: {
-        type: Sequelize.STRING
-      },
-      userToken: {
-        type: Sequelize.STRING
-      },
-      create_at: {
-        type: Sequelize.DATE
-      },
-      updated_at: {
-        type: Sequelize.DATE
-      },
-      deleted_at: {
+      rejectedAt: {
         type: Sequelize.DATE
       },
       createdAt: {
@@ -55,6 +31,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Receipts');
+    return queryInterface.dropTable('recoveryTokens');
   }
 };
