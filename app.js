@@ -1,117 +1,80 @@
-/****************************************
-*   Check-Please main server
-****************************************/
-
-require('dotenv').config()
-const bodyParser = require('body-parser');
+/* eslint-disable no-console */
+/*
+ * Check-Please main server
+ */
+require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const express = require('express');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const axios = require('axios');
-const session = require('express-session');
 const compression = require('compression');
 const path = require('path');
-const {convertingReceiptFromURL} = require('./controllers/taggun');
+const Sequelize = require('sequelize');
 const sanitizer = require('sanitize');
 const expressSanitizer = require('express-sanitizer');
-const SequelizeTokenify = require('sequelize-tokenify');
-const db = require('./db/models')
+const { Client } = require('pg');
 
 
+/** Import Routes */
+const { verifyAuthentication } = require('./utils/middleware');
+const indexRouter = require('./controllers/index.js');
+const authRouter = require('./controllers/auth.js');
+const receiptRouter = require('./controllers/receipt.js');
+const invoiceRouter = require('./controllers/invoice.js');
+const itemRouter = require('./controllers/item.js');
+const s3Router = require('./controllers/s3Bucket.js');
 
-//Instantiate the server
+/** Instantiate the server */
 const app = express();
-
 const PORT = process.env.PORT || 3000;
 
-/****************************************************
- *  Check for login token on every request
- ***************************************************/
-let verifyAuthentication = (req, res, next) => {
-    if (typeof req.cookies.jwtToken === 'undefined' || req.cookies.jwtToken === null) {
-      req.user = null;
-    } else {
-      var token = req.cookies.nToken;
+/** Set up static public directory */
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
-      //Synchronous verification
-      try{
-        decodedToken = jwt.verify(token, process.env.SECRETKEY);
-        console.log(decodedToken)
-        //console.log("***Authenticate***");
-        req.user = decodedToken.payload;
-      }catch(err){
-        console.log("Authentication Error:", err.message);
-      };
-    };
-    next();
-  };
-
-let verifyUserLoggedIn = (req, res)=>{
-    if(!req.user){
-        res.redirect("/");
-    };
-    next();
-};
-
-/**************************************************
-*  Middlewarez
-***************************************************/
-
- // Set up a static public directory
-app.use(express.static(path.join(__dirname, '..', 'public')))
+/** Middlewarez */
 app.use(cookieParser());
 app.use(express.json());
-app.use(verifyAuthentication)
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(compression());
-app.use(require('sanitize').middleware);
+app.use(sanitizer.middleware);
 app.use(expressSanitizer());
-/***************************************************
- *  SQL Connection
- ***************************************************/
-const Sequelize = require('sequelize');
-const sequelize = new Sequelize('checkplease', process.env.DBUSER, null, { dialect: 'postgres', logging: false });
 
-sequelize
-  .authenticate()
+/**  SQL Connection */
+const sequelize = new Sequelize(`postgres://${process.env.DBUSER}:${process.env.DBPASSWORD}@${process.env.DBHOST}:${process.env.DBPORT}/${process.env.DBNAME}`);
+
+sequelize.authenticate()
   .then(() => {
     console.log('Connection has been established successfully.');
   })
-  .catch(err => {
+  /** Early exit */
+  .catch((err) => {
     console.error('Unable to connect to the database:', err.message);
   });
 
 
-// Any remaining  request with an extension (.js, .css, etc...) send 404
+/** Set up routes */
+app.use('/', indexRouter);
+app.use('/auth', authRouter);
+
+/** Protected Routes */
+app.use(verifyAuthentication);
+app.use('/receipts', receiptRouter);
+app.use('/invoices', invoiceRouter);
+app.use('/items', itemRouter);
+
+
+/** S3 Bucket */
+app.use('/s3', s3Router);
+
+/** Any remaining request with an extension (.js, .css, etc...) send 404 */
 app.use((req, res, next) => {
   if (path.extname(req.path).length) {
-    const err = new Error('Not found')
-    err.status = 404
-    next(err)
-  } else {
-    next()
+    const err = new Error('Not found');
+    err.status = 404;
+    next(err);
   }
+
+  next();
 });
 
-// Error handling endware
-app.use(( err, req, res, next) => {
-  console.error(err);
-  console.error(err.stack);
-  res.status(err.status || 500).send(err.message || 'Internal server error')
-})
-
-/**************************************************
-*  Load Routes
-***************************************************/
-require('./controllers/signup.js')(app);
-require('./controllers/receipt.js')(app);
-require('./controllers/index.js')(app)
-
-
-// Listen on port number
-db.sequelize.sync().then(() => {
-  app.listen(PORT, function () {
-      console.log('Check Please listening on port', PORT);
-  });
- });
+app.listen(PORT, () => {
+  console.log('PaySplit listening on port', PORT);
+});
