@@ -50,7 +50,7 @@ sequelize.authenticate()
     console.error('Unable to connect to the database:', err.message);
   });
 
-
+// console.log(process.env.HEROKU_POSTGRESQL_BLUE_URL);
 /** Set up routes */
 app.use('/', indexRouter);
 app.use('/auth', authRouter);

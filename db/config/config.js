@@ -1,5 +1,3 @@
-
-
 module.exports = {
   development: {
     username: process.env.DBUSER,
@@ -24,3 +22,4 @@ module.exports = {
     dialect: 'postgres',
   },
 };
+console.log(process.env.HEROKU_POSTGRESQL_BLUE_URL);
