@@ -11,6 +11,9 @@ const Sequelize = require('sequelize');
 const sanitizer = require('sanitize');
 const expressSanitizer = require('express-sanitizer');
 
+/** Instantiate the server */
+const app = express();
+const PORT = process.env.PORT || 3000;
 
 /** Import Routes */
 const { verifyAuthentication } = require('./utils/middleware');
@@ -21,9 +24,6 @@ const invoiceRouter = require('./controllers/invoice.js');
 const itemRouter = require('./controllers/item.js');
 const s3Router = require('./controllers/s3Bucket.js');
 
-/** Instantiate the server */
-const app = express();
-const PORT = process.env.PORT || 3000;
 
 /** Set up static public directory */
 app.use(express.static(path.join(__dirname, '..', 'public')));
