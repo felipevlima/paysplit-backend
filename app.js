@@ -2,6 +2,7 @@
 /*
  * Check-Please main server
  */
+require('dotenv').load();
 require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const express = require('express');
@@ -14,6 +15,7 @@ const expressSanitizer = require('express-sanitizer');
 /** Instantiate the server */
 const app = express();
 const PORT = process.env.PORT || 3000;
+
 
 /** Import Routes */
 const { verifyAuthentication } = require('./utils/middleware');
