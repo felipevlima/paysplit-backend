@@ -1,7 +1,13 @@
 const path = require('path');
+
 module.exports = {
   "config": path.resolve('./db/config', 'config.js'),
   "models-path": path.resolve('./db/models'),
   "seeders-path": path.resolve('./db/seeders'),
   "migrations-path": path.resolve('./db/migrations')
 };
+
+// Resolve paths to absolute paths
+Object.keys(config).forEach((key) => {
+  config[key] = path.resolve(config[key]);
+});
