@@ -49,3 +49,31 @@
   level: 'info',
   timestamp: '2018-11-19T01:29:18.829Z',
   [Symbol(level)]: 'info' }
+{ message: 'Verify Token Error: JsonWebTokenError: invalid signature',
+  level: 'error',
+  timestamp: '2018-12-20T19:23:46.449Z',
+  [Symbol(level)]: 'error' }
+{ message: 'Verify Token Error: JsonWebTokenError: invalid token',
+  level: 'error',
+  timestamp: '2018-12-20T19:24:25.801Z',
+  [Symbol(level)]: 'error' }
+{ message: 'Verify Token Error: JsonWebTokenError: jwt malformed',
+  level: 'error',
+  timestamp: '2018-12-20T19:24:59.481Z',
+  [Symbol(level)]: 'error' }
+{ message:
+   { receipt_id: '691ff1e0-f5bf-11e8-81c3-331a77f51c54',
+     amount: '16',
+     recipient: '9786778022',
+     msg: 'Chipotle' },
+  level: 'info',
+  timestamp: '2018-12-20T19:26:14.479Z',
+  [Symbol(level)]: 'info' }
+{ message:
+   { receipt_id: '691ff1e0-f5bf-11e8-81c3-331a77f51c54',
+     amount: '16',
+     recipient: '9786778022',
+     msg: 'Chipotle' },
+  level: 'info',
+  timestamp: '2018-12-20T19:26:47.295Z',
+  [Symbol(level)]: 'info' }

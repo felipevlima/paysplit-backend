@@ -11,6 +11,7 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const sanitizer = require('sanitize');
 const expressSanitizer = require('express-sanitizer');
+const config = require('./db/config/config');
 
 /** Instantiate the server */
 const app = express();
@@ -50,7 +51,7 @@ sequelize.authenticate()
     console.error('Unable to connect to the database:', err.message);
   });
 
-// console.log(process.env.HEROKU_POSTGRESQL_BLUE_URL);
+
 /** Set up routes */
 app.use('/', indexRouter);
 app.use('/auth', authRouter);

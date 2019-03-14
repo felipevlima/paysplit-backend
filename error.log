@@ -17,3 +17,15 @@
   level: 'error',
   timestamp: '2018-11-17T01:35:04.317Z',
   [Symbol(level)]: 'error' }
+{ message: 'Verify Token Error: JsonWebTokenError: invalid signature',
+  level: 'error',
+  timestamp: '2018-12-20T19:23:46.449Z',
+  [Symbol(level)]: 'error' }
+{ message: 'Verify Token Error: JsonWebTokenError: invalid token',
+  level: 'error',
+  timestamp: '2018-12-20T19:24:25.801Z',
+  [Symbol(level)]: 'error' }
+{ message: 'Verify Token Error: JsonWebTokenError: jwt malformed',
+  level: 'error',
+  timestamp: '2018-12-20T19:24:59.481Z',
+  [Symbol(level)]: 'error' }
